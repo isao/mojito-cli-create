@@ -13,7 +13,7 @@ var path = require('path'),
     fs = require('fs'),
 
     hb = require('handlebars'),
-    log = require('npmlog'),
+    log = require('/Users/isao/Repos/wip/mojito-cli/log.js'),
     archetypePath = path.resolve(__dirname, './archetypes'),
     reservedWords = require('./conf/reserved-words');
 
@@ -40,10 +40,10 @@ function getArchetypeSrcDir(type, subtype) {
     try {
         stat = fs.statSync(srcdir);
         if (!stat.isDirectory()) {
-            log.error('Archetype path is not a directory', exports.usage, true);
+            log.error('', 'Archetype path is not a directory', exports.usage, true);
         }
     } catch (err) {
-        log.error(errmsg, exports.usage, true);
+        log.error('', errmsg, exports.usage, true);
     }
 
     return srcdir;
@@ -83,18 +83,19 @@ function cleanName(name) {
         msg;
 
     if (!name) {
-        log.error('Missing a target name to create', exports.usage, true);
+        log.error('', 'Missing a target name to create', exports.usage, true);
+        process.exit(1);
     }
 
     if (-1 !== reservedWords.indexOf(newname)) {
         msg = 'Name cannot be one of: ' + reservedWords.join(', ') + '\n';
-        log.error(msg, exports.usage, true);
+        log.error('', msg, exports.usage, true);
     }
 
     if (name !== newname) {
         msg = ['changing name ', name, ' to ', newname,
             ' so it is usable as a javascript identifier'].join('"');
-        log.info(msg);
+        log.info('', msg);
     }
 
     return newname;
@@ -134,7 +135,7 @@ function process_file(archetype_path, file, mojit_dir, template) {
             fs.createWriteStream(path.join(mojit_dir, file)),
             function (err) {
                 if (err) {
-                    log.warn('Failed to copy file: ' + file);
+                    log.warn('', 'Failed to copy file: ' + file);
                 }
             }
         );
@@ -151,15 +152,17 @@ function process_directory(archetype_path, dir, mojit_dir, template, force) {
         fs.mkdirSync(new_dir, parseInt('755', 8));
     } catch (err) {
         if (err.message.match(/EEXIST/)) {
-            log.warn('Overwriting existing directory: ' + new_dir);
+            log.warn('', 'Overwriting existing directory: ' + new_dir);
         } else if (err.message.match(/ENOENT/) &&
                    mojit_dir.indexOf('mojits') === 0) {
             if (!force) {
-                error('Please cd into a Mojito application before creating' +
+                log.error('', 'Please cd into a Mojito application before creating' +
                     ' a Mojit.\nTo force Mojit creation, use --force.');
+                process.exit(1);
             }
         } else {
-            error('Unexpected error: ' + err.message);
+            log.error('', 'Unexpected error: ' + err.message);
+            process.exit(127);
         }
     }
 
@@ -218,22 +221,22 @@ function run(params, options, callback) {
         destdir = path.resolve('mojits', name);
         break;
     default:
-        return log.error('Incorrect type "' + type +
+        return log.error('', 'Incorrect type "' + type +
             '", must be either "app", "mojit", or "custom".', exports.usage);
     }
 
     // get path to mojito's archetypes dir, or a custom one, or die
     srcdir = getArchetypeSrcDir(type, subtype);
 
-    log.info('creating ' + type + " type named '" + name + "'");
-    log.info('(using "' + subtype + '" archetype)');
+    log.info('', 'creating ' + type + " type named '" + name + "'");
+    log.info('', '(using "' + subtype + '" archetype)');
 
     // Define the inputs
     inputs.name = name;
     inputs.port = port;
 
     process_directory(srcdir, '/', destdir, inputs, force);
-    log.info(type + ': ' + name + ' created!');
+    log.info('', type + ': ' + name + ' created!');
     callback();
 }
 
