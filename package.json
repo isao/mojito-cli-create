@@ -9,6 +9,9 @@
     "handlebars": "~1.0.10",
     "npmlog": "0.0.2"
   },
+  "peerDependencies": {
+  	"mojito-cli": "~0.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/isao/mojito-create.git"
