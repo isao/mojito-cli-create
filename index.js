@@ -3,17 +3,15 @@
  * Copyrights licensed under the New BSD License.
  * See the accompanying LICENSE file for terms.
  */
-
-
-/*jslint anon:true, sloppy:true, regexp:true, nomen:true, stupid:true*/
-
+/*jshint node:true */
+'use strict';
 
 var path = require('path'),
     util = require('util'),
     fs = require('fs'),
 
     hb = require('handlebars'),
-    log = require('/Users/isao/Repos/wip/mojito-cli/log.js'),
+    log = require('./log'),
     archetypePath = path.resolve(__dirname, './archetypes'),
     reservedWords = require('./conf/reserved-words');
 
@@ -186,7 +184,7 @@ function process_directory(archetype_path, dir, mojit_dir, template, force) {
     });
 }
 
-function run(params, options, callback) {
+function run(params, options, meta, callback) {
     var port = options.port || 8666,
         force = options.force || false,
         inputs = contextCsvToObject(options.keyval || ''),
@@ -277,7 +275,7 @@ exports.usage = [
 /**
  * Standard options list export.
  */
-exports.options = [{
+module.exports.options = [{
     shortName: 'f',
     longName: 'force',
     hasValue: false
@@ -295,4 +293,4 @@ exports.options = [{
 /**
  * Standard run method hook export.
  */
-exports.run = run;
+module.exports = run;

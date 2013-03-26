@@ -3,7 +3,7 @@
   "version": "0.0.0PR1",
   "description": "Subcommand for mojito-cli to create mojito scaffolding/boilerplate.",
   "scripts": {
-    "test": "node tests"
+    "test": "echo none && exit 1"
   },
   "dependencies": {
     "handlebars": "~1.0.10",
@@ -18,13 +18,14 @@
   "devDependencies": {
   },
   "readmeFilename": "README.md",
-  "gitHead": "02533c316d67d91c030412b3b98d8ce968c64661",
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "keywords": [
     "mojito",
-    "cli"
+    "boilerplate",
+    "cli",
+    "init"
   ]
 }
