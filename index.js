@@ -185,6 +185,21 @@ function process_directory(archetype_path, dir, mojit_dir, template, force) {
     });
 }
 
+function npmInstall(dir) {
+    log.info('Installing app "' + dir + '" dependencies with npm.');
+    exec('cd ' + dir + ' && npm -s i', function(err, stdout, stderr) {
+        if (err) {
+            log.error('Could not install dependencies.');
+        }
+        if (stdout.trim().length) {
+            log.info(stdout);
+        }
+        if (stderr.trim().length) {
+            log.error(stderr);
+        }
+    });
+}
+
 function run(params, options, meta, callback) {
     var port = options.port || 8666,
         force = options.force || false,
@@ -235,21 +250,10 @@ function run(params, options, meta, callback) {
     inputs.port = port;
 
     process_directory(srcdir, '/', destdir, inputs, force);
-    log.info(type + ': ' + name + ' created!');
+    log.info(type + ' ' + name + ' created.');
 
     if ('app' === type) {
-        log.info('Installing app dependencies with npm...');
-    	exec('cd ' + name + ' && npm -s i', function(err, stdout, stderr) {
-    	    if (err) {
-    	    	log.error('Could not install dependencies');
-    	    }
-    		if (stdout.trim().length) {
-    		    log.info(stdout);
-    		}
-    		if (stderr.trim().length) {
-    			log.error(stderr);
-    		}
-    	});
+        npmInstall(name);
     }
 
     callback();
