@@ -10,15 +10,23 @@
     "npmlog": "0.0.2"
   },
   "peerDependencies": {
-  	"mojito-cli": "~0.0.0"
+    "mojito-cli": "~0.0.0"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/yahoo/mojito-create.git"
   },
-  "author": "",
+  "contributors": [
+    "Chris Klaiber <cklaiber@yahoo-inc.com>",
+    "Drew Folta <folta@yahoo-inc.com>",
+    "Isao Yagi <isao@yahoo-inc.com>",
+    "Martin Cooper <mcooper@yahoo-inc.com>",
+    "Matt Taylor <mtaylor@yahoo-inc.com>",
+    "Ric Allinson <allinson@yahoo-inc.com>"
+  ],
   "license": "BSD",
   "devDependencies": {
+    "tape": "~0.3.2"
   },
   "readmeFilename": "README.md",
   "main": "index.js",
@@ -28,7 +36,6 @@
   "keywords": [
     "mojito",
     "boilerplate",
-    "cli",
     "init"
   ]
 }

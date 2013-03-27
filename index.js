@@ -10,11 +10,11 @@ var path = require('path'),
     util = require('util'),
     fs = require('fs'),
     exec = require('child_process').exec,
-
     hb = require('handlebars'),
     log = require('./log'),
-    archetypePath = path.resolve(__dirname, './archetypes'),
-    reservedWords = require('./conf/reserved-words');
+    reservedWords = require('./conf/reserved-words'),
+
+    archetypePath = path.resolve(__dirname, './archetypes');
 
 
 /**
