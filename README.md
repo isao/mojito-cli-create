@@ -22,10 +22,6 @@ This will create an empty mojit with the name provided. The command assumes it i
 
 As with application creation, if no archetype name is provided, the default archetype is used. Depending upon the archetype, the skeleton may include any or all of the controller, model, view, and binder.
 
-Additionally, you can specify the path to specific archetype.
-
-    $ mojito create custom <path/to/archtype> <name>
-
 Mojito Archetypes
 -----------------
 
@@ -35,6 +31,24 @@ Mojito offers the following three archetypes for applications and mojits.
 * default - This archetype is run if no command-line archetype option is specified. It is a happy medium between simple and full.
 * full - Provides the most comprehensive configuration and code for applications.
 * hybrid - Creates a hybrid HTML5 application that can be plugged into a future component of Cocktails that will allow HTML5/JavaScript applications to access the features of native devices.
+
+Custom Archetypes
+-----------------
+
+You can copy the [built-in](https://github.com/yahoo/mojito-create/tree/master/archetypes) archetypes and modify them to suit your work-flow, or create your own. Then you can specify the path to specific archetype, like so:
+
+    $ mojito create custom <path/to/archtype> <name>
+
+If a file in the archetype source ends with ".hb" then the contents of the file will be treated like a [handlebars](http://handlebarsjs.com/) template, with key/value replacement done for the following:
+
+* `{{port}}` -> default port number 8666 or the value passed by option `--port`
+* `{{name}}` -> the name passed as the last command line argument that is not a flag or option, like `--port`
+* key/value pairs in a string following the `--keyval`, or `-k` option. For example:
+  * let's say you have an archetype directory at `../menus` containing one file `today.html.hb`.
+  * the text file `today.html.hb` contains placeholders `{{dish}}` and `{{side}}`
+  * you do this: `mojito create custom ../menus TodaysMenu -k dish:tilapia,side:macaroni`
+    * a new directory `TodaysMenu` is created containing the file `today.html` (the ".hb" extension is removed).
+    * in the file `today.html`, all occurrences of the strings `{{dish}}` and `{{side}}` are replaced with `tilapia` and `macaroni`.
 
 Discussion/Forums
 -----------------
