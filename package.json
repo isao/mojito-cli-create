@@ -9,6 +9,9 @@
     "handlebars": "~1.0.10",
     "npmlog": "0.0.2"
   },
+  "devDependencies": {
+    "tape": "~0.3.2"
+  },
   "peerDependencies": {
     "mojito-cli": "~0.0.0"
   },
@@ -25,9 +28,6 @@
     "Ric Allinson <allinson@yahoo-inc.com>"
   ],
   "license": "BSD",
-  "devDependencies": {
-    "tape": "~0.3.2"
-  },
   "readmeFilename": "README.md",
   "main": "index.js",
   "directories": {
