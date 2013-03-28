@@ -19,6 +19,7 @@
     "type": "git",
     "url": "git://github.com/yahoo/mojito-create.git"
   },
+  "bugs": "https://github.com/yahoo/mojito-create/issues",
   "contributors": [
     "Chris Klaiber <cklaiber@yahoo-inc.com>",
     "Drew Folta <folta@yahoo-inc.com>",
