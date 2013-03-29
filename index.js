@@ -261,9 +261,15 @@ function run(params, options, meta, callback) {
 
 
 /**
+ * Standard run method hook export.
+ */
+module.exports = run;
+
+
+/**
  * Standard usage string export.
  */
-exports.usage = [
+module.exports.usage = [
     'mojito create {type} [subtype or source directory] {name} [options]',
     '  - type: "app", "mojit", or "custom".',
     '  - archetype: optional template. Possible values are default, full, simple',
@@ -309,9 +315,3 @@ module.exports.options = [{
     longName: 'port',
     hasValue: true
 }];
-
-
-/**
- * Standard run method hook export.
- */
-module.exports = run;
