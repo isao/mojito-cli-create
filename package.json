@@ -13,7 +13,7 @@
     "tape": "~0.3.2"
   },
   "peerDependencies": {
-    "mojito-cli": "~0.0.0"
+    "mojito-cli": "*"
   },
   "repository": {
     "type": "git",
