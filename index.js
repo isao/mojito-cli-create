@@ -235,8 +235,9 @@ function run(params, options, meta, callback) {
         destdir = path.resolve('mojits', name);
         break;
     default:
-        return log.error('Incorrect type "' + type +
-            '", must be either "app", "mojit", or "custom".', exports.usage);
+        log.info(module.exports.usage);
+        callback('Unknown type "' + type + '", use "app", "mojit", or "custom".');
+        return;
     }
 
     // get path to mojito's archetypes dir, or a custom one, or die
@@ -264,7 +265,6 @@ function run(params, options, meta, callback) {
  * Standard run method hook export.
  */
 module.exports = run;
-
 
 /**
  * Standard usage string export.
