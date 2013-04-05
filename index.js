@@ -129,15 +129,8 @@ function process_file(archetype_path, file, mojit_dir, template) {
         process_template(archetype_path, file, mojit_dir, template);
     } else {
         // Just copy the file over
-        util.pump(
-            fs.createReadStream(path.join(archetype_path, file)),
-            fs.createWriteStream(path.join(mojit_dir, file)),
-            function (err) {
-                if (err) {
-                    log.warn('Failed to copy file: ' + file);
-                }
-            }
-        );
+        fs.createReadStream(path.join(archetype_path, file))
+            .pipe(fs.createWriteStream(path.join(mojit_dir, file)));
     }
 }
 
