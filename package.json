@@ -2,9 +2,6 @@
   "name": "mojito-create",
   "version": "0.0.0PR1",
   "description": "Subcommand for mojito-cli to create mojito scaffolding/boilerplate.",
-  "scripts": {
-    "test": "echo none && exit 1"
-  },
   "dependencies": {
     "handlebars": "~1.0.10",
     "npmlog": "0.0.2"
@@ -14,6 +11,11 @@
   },
   "peerDependencies": {
     "mojito-cli": "*"
+  },
+  "scripts": {
+    "test": "node tests",
+    "cover": "istanbul cover --dir artifacts/coverage -- tests",
+    "bumppatch": "npm version patch -m \"tag v%s (based on $(git describe))\""
   },
   "repository": {
     "type": "git",
