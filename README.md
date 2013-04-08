@@ -30,7 +30,6 @@ Mojito offers the following three archetypes for applications and mojits.
 * simple - The minimal configuration and code needed to run an application.
 * default - This archetype is run if no command-line archetype option is specified. It is a happy medium between simple and full.
 * full - Provides the most comprehensive configuration and code for applications.
-* hybrid - Creates a hybrid HTML5 application that can be plugged into a future component of Cocktails that will allow HTML5/JavaScript applications to access the features of native devices.
 
 Custom Archetypes
 -----------------
