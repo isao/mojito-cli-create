@@ -63,7 +63,7 @@ function contextCsvToObject(s) {
         pair = pairs[i].split(':');
         if (pair[0]) {
             if (!pair[1]) {
-                warn('Missing value for context key: ' + pair[0]);
+                log.warn('Missing value for key: ' + pair[0]);
             } else {
                 ctx[pair[0]] = pair[1];
             }
