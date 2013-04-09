@@ -1,16 +1,13 @@
 {
   "name": "mojito-create",
-  "version": "0.0.0PR1",
+  "version": "0.0.0PR2",
   "description": "Subcommand for mojito-cli to create mojito scaffolding/boilerplate.",
   "dependencies": {
     "handlebars": "~1.0.10",
     "npmlog": "0.0.2"
   },
   "devDependencies": {
-    "tape": "~0.3.2"
-  },
-  "peerDependencies": {
-    "mojito-cli": "*"
+    "tap": "~0.4.1"
   },
   "scripts": {
     "test": "node tests",
