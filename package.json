@@ -11,6 +11,7 @@
   },
   "scripts": {
     "test": "node tests",
+    "lint": "jshint {.,commands,lib}/*.js && echo ok",
     "cover": "istanbul cover --dir artifacts/coverage -- tests",
     "bumppatch": "npm version patch -m \"tag v%s (based on $(git describe))\""
   },
