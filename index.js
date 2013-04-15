@@ -45,7 +45,7 @@ function parseCsv(str) {
         }
     }
 
-    str.split(',').map(splitcolon).forEach(onpair);
+    (str || '').split(',').map(splitcolon).forEach(onpair);
     return out;
 }
 

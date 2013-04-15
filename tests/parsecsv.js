@@ -61,3 +61,15 @@ test('parse ",:,:,,"', function(t) {
     t.same(fn(',:,:,,'), expected);
     t.end();
 });
+
+test('parse null', function(t) {
+    var expected = {};
+    t.same(fn(null), expected);
+    t.end();
+});
+
+test('parse undefined', function(t) {
+    var expected = {};
+    t.same(fn(), expected);
+    t.end();
+});
