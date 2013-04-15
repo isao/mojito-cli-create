@@ -1,8 +1,8 @@
 var resolve = require('path').resolve;
 
 module.exports = {
-    'force': false,
-    'mungename': true,
+    'clobber': false,
+    'remove': false,
     'port': 8666,
-    'sources': resolve(__dirname, 'archetypes')
+    'sources': ['.', resolve(__dirname, '../archetypes')]
 };
