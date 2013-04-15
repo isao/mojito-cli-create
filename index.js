@@ -23,7 +23,7 @@ function exists(filepath) {
     return stat;
 }
 
-function getSource(paths, target) {
+function findInPaths(paths, target) {
     var filepath;
     function checkpath(basedir) {
         filepath = path.resolve(basedir, target);
@@ -65,4 +65,4 @@ module.exports.options = [
     {shortName: 'p', hasValue: true,  longName: 'port'}
 ];
 
-module.exports.getSource = getSource;
+module.exports.findInPaths = findInPaths;
