@@ -40,8 +40,9 @@ function parseCsv(str) {
     }
 
     function onpair(pair) {
-        if (pair.length && pair[0].length) {
-            out[pair[0].trim()] = pair[1].trim();
+        if ((pair.length > 1) && pair[0].length) {
+            // extra join to restore colon values like "a:b:c" -> {a: "b:c"}
+            out[pair[0].trim()] = pair.slice(1).join(':').trim();
         }
     }
 
