@@ -36,7 +36,7 @@ function parseCsv(str) {
     var out = {};
 
     function splitcolon(item) {
-        return item && item.split(':');
+        return item.split(':');
     }
 
     function onpair(pair) {
