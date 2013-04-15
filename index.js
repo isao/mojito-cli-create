@@ -32,6 +32,23 @@ function findInPaths(paths, target) {
     return paths.some(checkpath) ? filepath : false;
 }
 
+function parseCsv(str) {
+    var out = {};
+
+    function splitcolon(item) {
+        return item && item.split(':');
+    }
+
+    function onpair(pair) {
+        if (pair.length && pair[0].length) {
+            out[pair[0].trim()] = pair[1].trim();
+        }
+    }
+
+    str.split(',').map(splitcolon).forEach(onpair);
+    return out;
+}
+
 function run(params, options, meta, callback) {
 }
 
@@ -66,3 +83,4 @@ module.exports.options = [
 ];
 
 module.exports.findInPaths = findInPaths;
+module.exports.parseCsv = parseCsv;
