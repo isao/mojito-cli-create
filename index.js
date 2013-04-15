@@ -26,7 +26,7 @@ function exists(filepath) {
 function getSource(paths, target) {
     var filepath;
     function checkpath(basedir) {
-    	filepath = path.resolve(basedir, target);
+        filepath = path.resolve(basedir, target);
         return exists(filepath);
     }
     return paths.some(checkpath) ? filepath : false;
@@ -55,15 +55,12 @@ module.exports.usage = [
     'OPTIONS: ',
     '  --port [number]  Specifies default port for your Mojito app to run on.',
     '  -p [number]      Short for --port',
-    '  --force          Forced mojit creation even outside a Mojito app.',
-    '  -f               Short for --force',
     '  -keyval [string] key value pairs to pass to a custom archetype template',
     '                   a key/value is separated by colons, key/value pairs by',
     '                   commas: "key1:val1,key2:val2',
     '  -k [string]      Short for --keyval'].join("\n");
 
 module.exports.options = [
-    {shortName: 'f', hasValue: false, longName: 'force'},
     {shortName: 'k', hasValue: true,  longName: 'keyval'},
     {shortName: 'p', hasValue: true,  longName: 'port'}
 ];
