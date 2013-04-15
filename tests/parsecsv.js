@@ -11,6 +11,15 @@ test('parse "aaa:111,bbb:222,,"', function(t) {
     t.end();
 });
 
+test('parse ",aaa:111,,bbb:222:"', function(t) {
+    var expected = {
+            aaa:111,
+            bbb:222
+        };
+    t.same(fn(',aaa:111,,bbb:222:'), expected);
+    t.end();
+});
+
 test('later occurances of a key take precedence', function(t) {
     var expected = {
             aaa:888,
@@ -53,6 +62,12 @@ test('parse ""', function(t) {
 test('parse ",,,"', function(t) {
     var expected = {};
     t.same(fn(',,,'), expected);
+    t.end();
+});
+
+test('parse ":valonly,keyonly:,,"', function(t) {
+    var expected = {keyonly:''};
+    t.same(fn(':valonly,keyonly:,,'), expected);
     t.end();
 });
 
