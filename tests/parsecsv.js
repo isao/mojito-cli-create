@@ -45,6 +45,14 @@ test('a value CAN contain colons', function(t) {
     t.end();
 });
 
+test('space between inner value-colons not trimmed', function(t) {
+    var expected = {
+            aaa: 'bbb : ccc : ddd :',
+        };
+    t.same(fn('aaa: bbb : ccc : ddd : '), expected);
+    t.end();
+});
+
 test('empty values ok', function(t) {
     var expected = {
             aaa:888,
