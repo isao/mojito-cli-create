@@ -1,5 +1,5 @@
 var test = require('tap').test,
-    fn = require('../').parseCsv;
+    fn = require('../lib/utils').parseCsvObj;
 
 
 test('parse "aaa:111,bbb:222,,"', function(t) {

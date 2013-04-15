@@ -7,47 +7,11 @@
 
 var path = require('path'),
     fs = require('fs'),
-    log = require('./log'),
+    log = require('./lib/log'),
+    util = require('./lib/utils'),
 
     srcpaths = ['.', path.resolve(__dirname, 'archetypes')];
 
-
-function exists(filepath) {
-    var stat = false;
-    try {
-        stat = fs.statSync(filepath);
-    } catch(err) {
-        log.debug('%s does not exist', filepath);
-    }
-    return stat;
-}
-
-function findInPaths(paths, target) {
-    var filepath;
-    function checkpath(basedir) {
-        filepath = path.resolve(basedir, target);
-        return exists(filepath);
-    }
-    return paths.some(checkpath) ? filepath : false;
-}
-
-function parseCsv(str) {
-    var out = {};
-
-    function splitcolon(item) {
-        return item.split(':');
-    }
-
-    function onpair(pair) {
-        if ((pair.length > 1) && pair[0].length) {
-            // extra join to restore colon values like "a:b:c" -> {a: "b:c"}
-            out[pair[0].trim()] = pair.slice(1).join(':').trim();
-        }
-    }
-
-    (str || '').split(',').map(splitcolon).forEach(onpair);
-    return out;
-}
 
 function run(params, options, meta, callback) {
 }
@@ -83,6 +47,3 @@ module.exports.options = [
     {shortName: 'k', hasValue: true,  longName: 'keyval'},
     {shortName: 'p', hasValue: true,  longName: 'port'}
 ];
-
-module.exports.findInPaths = findInPaths;
-module.exports.parseCsv = parseCsv;
