@@ -31,7 +31,8 @@ function pathify(subpath) {
 }
 
 function subTypePath(type, args) {
-    return path.join(type, args.length > 1 ? args.shift() : 'default')
+    var subtype = args.length > 1 ? args.shift() : 'default';
+    return path.join(type, subtype).toLowerCase(); // i.e. 'app/full'
 }
 
 function exec(source, opts, cb) {
@@ -39,9 +40,10 @@ function exec(source, opts, cb) {
 }
 
 function main(args, opts, meta, cb) {
-    var type = (args.shift() || '').toLowerCase(),
+    var type = args.shift() || '',
         source,
-        errmsg;
+        errmsg,
+        data;
 
     if (!type) {
         cb(errorWithUsage('Missing parameters. Please specify a type & name.'));
@@ -53,7 +55,8 @@ function main(args, opts, meta, cb) {
         return source;
     }
 
-    switch (type) {
+    // get archetype source directory based on first one OR two arguments
+    switch (type.toLowerCase()) {
     case 'app':
     case 'mojit':
         // 1. mojito create [options] <app|mojit> [full|simple|default] <name>
@@ -73,10 +76,22 @@ function main(args, opts, meta, cb) {
         errmsg = type + ' is not a valid archetype or path.';
     }
 
-    if (!source) {
-        cb(errorWithUsage(errmsg, 5));
+    if (source) {
+        data = util.parseCsvObj(opts.keyval);
+        data.name = args.shift();
+        data.port = opts.port || 8666;
+        data.directory = opts.directory || '.';
+
+        if (!data.name) {
+            cb(errorWithUsage('Missing name.', 3));
+            return source;
+        }
+
+        // ok, let's create
+        exec(source, data, cb);
+
     } else {
-        exec(source, opts, cb);
+        cb(errorWithUsage(errmsg, 5));
     }
 
     return source;
