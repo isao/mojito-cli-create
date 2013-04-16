@@ -120,7 +120,9 @@ module.exports.usage = [
     '  -k [string]      Short for --keyval'].join('\n');
 
 module.exports.options = [
+    {shortName: 'd', hasValue: true,  longName: 'directory'},
     {shortName: 'k', hasValue: true,  longName: 'keyval'},
     {shortName: 'p', hasValue: true,  longName: 'port'}
 ];
+
 
