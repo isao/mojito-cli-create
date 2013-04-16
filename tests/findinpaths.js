@@ -4,27 +4,27 @@ var test = require('tap').test,
     archdir = resolve(__dirname, '../archetypes');
 
 
-test('getSource(archtypes/app/default)', function(t) {
+test('findInPaths(archtypes/app/default)', function(t) {
     var expected = resolve(__dirname, '../archetypes/app/default');
 
     t.equals(fn([archdir], 'app/default'), expected);
     t.end();
 });
 
-test('getSource() ok for files', function(t) {
+test('findInPaths() ok for files', function(t) {
     var expected = resolve(__dirname, '../archetypes/app/default/package.json.hb');
 
     t.equals(fn([archdir], 'app/default/package.json.hb'), expected);
     t.end();
 });
 
-test('getSource() nonesuch returns false', function(t) {
+test('findInPaths() nonesuch returns false', function(t) {
     t.false(fn([archdir], 'unicorn'));
     t.equal(false, fn([archdir], 'unicorn'));
     t.end();
 });
 
-test('getSource() follows symlinks to dirs', function(t) {
+test('findInPaths() follows symlinks to dirs', function(t) {
     var expected = resolve(__dirname, 'fixtures/simple'),
         srcdir = resolve(__dirname, 'fixtures');
 
@@ -32,7 +32,7 @@ test('getSource() follows symlinks to dirs', function(t) {
     t.end();
 });
 
-test('getSource() follows symlinks to files', function(t) {
+test('findInPaths() follows symlinks to files', function(t) {
     var expected = resolve(__dirname, 'fixtures/simple/package.json.hb'),
         srcdir = resolve(__dirname, 'fixtures');
 
