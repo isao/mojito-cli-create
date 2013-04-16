@@ -14,19 +14,19 @@ var path = require('path'),
 
 
 function run(params, options, meta, callback) {
+function main(args, opts, meta, cb) {
 }
 
 
-module.exports = run;
+module.exports = main;
 
 module.exports.usage = [
-    'mojito create [options] <type> <subtype> <name>',
-    'mojito create [options] <type> <name>',
-    'mojito create [options] custom <path/to/archetype> <name>',
-    //'mojito create [options] <path/to/archetype> <name>',
-    '  - type: "app", "mojit", or "custom".',
-    '  - subtype: optional, possible values are default, full, simple',
-    '      if omitted "default": is used',
+    'Usage: mojito create [options] <type> [subtype] <name>',
+    'Usage: mojito create [options] custom <path/to/archetype> <name>',
+    'Usage: mojito create [options] <path/to/archetype> <name>',
+    '  - type: "app", or "mojit"',
+    '  - subtype: if type is "app", or "mojit", possible values are "default", "full",',
+    '    and "simple". If omitted, subtype "default" is used.',
     '  - name: string to use for created file or directory/app/mojit',
     '',
     'Example: mojito create app Foo',
@@ -41,9 +41,10 @@ module.exports.usage = [
     '  -keyval [string] key value pairs to pass to a custom archetype template',
     '                   a key/value is separated by colons, key/value pairs by',
     '                   commas: "key1:val1,key2:val2',
-    '  -k [string]      Short for --keyval'].join("\n");
+    '  -k [string]      Short for --keyval'].join('\n');
 
 module.exports.options = [
     {shortName: 'k', hasValue: true,  longName: 'keyval'},
     {shortName: 'p', hasValue: true,  longName: 'port'}
 ];
+
