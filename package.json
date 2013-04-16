@@ -4,7 +4,9 @@
   "description": "Subcommand for mojito-cli to create mojito scaffolding/boilerplate.",
   "dependencies": {
     "handlebars": "~1.0.10",
-    "npmlog": "0.0.2"
+    "npmlog": "0.0.2",
+    "scanfs": "0.0.2",
+    "mkdirp": "~0.3.5"
   },
   "devDependencies": {
     "tap": "~0.4.1"

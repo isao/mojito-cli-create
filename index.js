@@ -8,6 +8,7 @@
 var path = require('path'),
     log = require('./lib/log'),
     util = require('./lib/utils'),
+    create = require('./lib/create'),
 
     srcpaths = ['.', path.resolve(__dirname, 'archetypes')];
 
@@ -28,6 +29,14 @@ function pathify(subpath) {
     return util.findInPaths(srcpaths, subpath);
 }
 
+function subTypePath(type, args) {
+    return path.join(type, args.length > 1 ? args.shift() : 'default')
+}
+
+function exec(source, opts, cb) {
+
+}
+
 function main(args, opts, meta, cb) {
     var type = (args.shift() || '').toLowerCase(),
         source,
@@ -46,23 +55,24 @@ function main(args, opts, meta, cb) {
     switch (type) {
     case 'app':
     case 'mojit':
-        source = pathify(path.join(type, args.length > 1 ? args.shift() : 'default'));
+        source = pathify(subTypePath(type, args));
         errmsg = 'Invalid subtype.';
         break;
 
     case 'custom':
         source = pathify(args.shift());
-        errmsg = 'Custom archtype path is invalid';
+        errmsg = 'Custom archtype path is invalid.';
         break;
 
     default:
         source = pathify(type);
-        errmsg = 'Archtype path is invalid';
+        errmsg = type + ' is not a valid archetype or path.';
     }
 
     if (!source) {
         cb(errorWithUsage(errmsg, 5));
-        return source;
+    } else {
+        exec(source, opts, cb);
     }
 
     return source;
