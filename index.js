@@ -35,10 +35,6 @@ function subTypePath(type, args) {
     return path.join(type, subtype).toLowerCase(); // i.e. 'app/full'
 }
 
-function exec(source, opts, cb) {
-
-}
-
 function main(args, opts, meta, cb) {
     var type = args.shift() || '',
         source,
@@ -80,15 +76,20 @@ function main(args, opts, meta, cb) {
         data = util.parseCsvObj(opts.keyval);
         data.name = args.shift();
         data.port = opts.port || 8666;
-        data.directory = opts.directory || '.';
 
         if (!data.name) {
             cb(errorWithUsage('Missing name.', 3));
             return source;
         }
 
-        // ok, let's create
-        exec(source, data, cb);
+        // ok, go.
+        create({
+            from: source,
+            dest: path.join(opts.directory || '.', data.name),
+            data: data,
+            meta: meta,
+            opts: opts
+        }, cb);
 
     } else {
         cb(errorWithUsage(errmsg, 5));

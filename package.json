@@ -4,9 +4,9 @@
   "description": "Subcommand for mojito-cli to create mojito scaffolding/boilerplate.",
   "dependencies": {
     "handlebars": "~1.0.10",
+    "mkdirp": "~0.3.5",
     "npmlog": "0.0.2",
-    "scanfs": "0.0.2",
-    "mkdirp": "~0.3.5"
+    "scanfs": "0.0.2"
   },
   "devDependencies": {
     "tap": "~0.4.1"
@@ -32,10 +32,6 @@
   ],
   "license": "BSD",
   "readmeFilename": "README.md",
-  "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
   "keywords": [
     "mojito",
     "boilerplate",
