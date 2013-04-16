@@ -10,7 +10,8 @@ var path = require('path'),
     util = require('./lib/utils'),
     create = require('./lib/create'),
 
-    srcpaths = ['.', path.resolve(__dirname, 'archetypes')];
+    // todo: enable user configuration
+    SRCPATHS = ['.', path.resolve(__dirname, 'archetypes')];
 
 
 function error(msg, exit_code) {
@@ -26,7 +27,7 @@ function errorWithUsage(msg, exit_code) {
 }
 
 function pathify(subpath) {
-    return util.findInPaths(srcpaths, subpath);
+    return util.findInPaths(SRCPATHS, subpath);
 }
 
 function subTypePath(type, args) {
@@ -44,27 +45,30 @@ function main(args, opts, meta, cb) {
 
     if (!type) {
         cb(errorWithUsage('Missing parameters. Please specify a type & name.'));
-        return false;
+        return source;
     }
 
     if (!args.length) {
         cb(errorWithUsage('Missing parameter(s).', 3));
-        return false;
+        return source;
     }
 
     switch (type) {
     case 'app':
     case 'mojit':
+        // 1. mojito create [options] <app|mojit> [full|simple|default] <name>
         source = pathify(subTypePath(type, args));
         errmsg = 'Invalid subtype.';
         break;
 
     case 'custom':
+        // 2. mojito create [options] custom <path/to/archetype> <name>
         source = pathify(args.shift());
         errmsg = 'Custom archtype path is invalid.';
         break;
 
     default:
+        // 3. mojito create [options] <path/to/archetype> <name>
         source = pathify(type);
         errmsg = type + ' is not a valid archetype or path.';
     }
@@ -82,13 +86,9 @@ function main(args, opts, meta, cb) {
 module.exports = main;
 
 module.exports.usage = [
-    'Usage: mojito create [options] <type> [subtype] <name>',
+    'Usage: mojito create [options] <app|mojit> [full|simple|default] <name>',
     'Usage: mojito create [options] custom <path/to/archetype> <name>',
     'Usage: mojito create [options] <path/to/archetype> <name>',
-    '  - type: "app", or "mojit"',
-    '  - subtype: if type is "app", or "mojit", possible values are "default", "full",',
-    '    and "simple". If omitted, subtype "default" is used.',
-    '  - name: string to use for created file or directory/app/mojit',
     '',
     'Example: mojito create app Foo',
     '  (creates directory "Foo" containing a new Mojito application named "Foo")',
