@@ -30,13 +30,9 @@ function pathify(subpath) {
     return util.findInPaths(SRCPATHS, subpath);
 }
 
-function subTypePath(type, args) {
+function subtypePath(type, args) {
     var subtype = args.length > 1 ? args.shift() : 'default';
     return path.join(type, subtype).toLowerCase(); // i.e. 'app/full'
-}
-
-function exec(source, opts, cb) {
-
 }
 
 function main(args, opts, meta, cb) {
@@ -60,7 +56,7 @@ function main(args, opts, meta, cb) {
     case 'app':
     case 'mojit':
         // 1. mojito create [options] <app|mojit> [full|simple|default] <name>
-        source = pathify(subTypePath(type, args));
+        source = pathify(subtypePath(type, args));
         errmsg = 'Invalid subtype.';
         break;
 
@@ -80,15 +76,14 @@ function main(args, opts, meta, cb) {
         data = util.parseCsvObj(opts.keyval);
         data.name = args.shift();
         data.port = opts.port || 8666;
-        data.directory = opts.directory || '.';
 
         if (!data.name) {
             cb(errorWithUsage('Missing name.', 3));
             return source;
         }
 
-        // ok, let's create
-        exec(source, data, cb);
+        // ok, go.
+        create(source, path.join(opts.directory || '.', data.name), data, cb);
 
     } else {
         cb(errorWithUsage(errmsg, 5));
