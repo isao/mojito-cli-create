@@ -6,15 +6,66 @@
 'use strict';
 
 var path = require('path'),
-    fs = require('fs'),
     log = require('./lib/log'),
     util = require('./lib/utils'),
 
     srcpaths = ['.', path.resolve(__dirname, 'archetypes')];
 
 
-function run(params, options, meta, callback) {
+function error(msg, exit_code) {
+    var err = new Error(msg);
+    err.code = exit_code || 1;
+    return err;
+}
+
+function errorWithUsage(msg, exit_code) {
+    var err = error(msg, exit_code);
+    err.usage = module.exports.usage;
+    return err;
+}
+
+function pathify(subpath) {
+    return util.findInPaths(srcpaths, subpath);
+}
+
 function main(args, opts, meta, cb) {
+    var type = (args.shift() || '').toLowerCase(),
+        source,
+        errmsg;
+
+    if (!type) {
+        cb(errorWithUsage('Missing parameters. Please specify a type & name.'));
+        return false;
+    }
+
+    if (!args.length) {
+        cb(errorWithUsage('Missing parameter(s).', 3));
+        return false;
+    }
+
+    switch (type) {
+    case 'app':
+    case 'mojit':
+        source = pathify(path.join(type, args.length > 1 ? args.shift() : 'default'));
+        errmsg = 'Invalid subtype.';
+        break;
+
+    case 'custom':
+        source = pathify(args.shift());
+        errmsg = 'Custom archtype path is invalid';
+        break;
+
+    default:
+        source = pathify(type);
+        errmsg = 'Archtype path is invalid';
+    }
+
+    if (!source) {
+        cb(errorWithUsage(errmsg, 5));
+        return source;
+    }
+
+    return source;
 }
 
 
