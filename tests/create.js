@@ -1,25 +1,35 @@
 var test = require('tap').test,
     resolve = require('path').resolve,
-
     fs = require('fs'),
+
+    log = require('../lib/log'),
     fn = require('../lib/create');
 
 
-test('[side-effects] create from fixture', function(t) {
+log.pause();
+
+test('[func] create from fixtures/symlinked', function(t) {
     var from = resolve(__dirname, 'fixtures', 'symlinked'),
-        to = resolve(__dirname, 'artifacts'),
+        to = resolve(__dirname, 'artifacts', 'symlinked-' + process.pid),
+        data = {port:98765, name:'MyAppName'},
+
+        expected_count = 6,
         scan;
 
-    t.plan(3);
-
+    t.plan(4);
     function cb(err, msg) {
         t.false(err, 'null error');
-        t.equal(+msg, 6, 'fs node count');
+        t.equal(msg, expected_count, 'fs node count');
     }
 
-    scan = fn(from, to, {}, cb);
+    scan = fn(from, to, data, cb);
     scan.on('ignored', function(err, pathname) {
-        t.equal(pathname.slice(-12), '.placeholder', '.placeholder ignored');
+        var expected = 'mojits/.placeholder';
+        t.equal(pathname.slice(-expected.length), expected, '.placeholder ignored');
+    });
+
+    scan.on('done', function(count) {
+        t.equal(count, expected_count, 'fs node count');
     });
 });
 
