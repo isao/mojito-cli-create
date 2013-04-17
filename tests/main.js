@@ -145,7 +145,7 @@ test('create path/to/fixtures (missing name)', function(t) {
         t.equal(err.code, 3);
     }
 
-    var d = path.join(__dirname, 'fixtures', 'simple');
+    var d = path.join(__dirname, 'fixtures', 'symlinked');
 
     t.equal(fn([d], {}, {}, cb), undefined);
 });
@@ -153,6 +153,6 @@ test('create path/to/fixtures (missing name)', function(t) {
 test('create path/to/fixtures foo', function(t) {
     t.plan(1);
 
-    var d = path.join(__dirname, 'fixtures', 'simple');
+    var d = path.join(__dirname, 'fixtures', 'symlinked');
     t.equal(fn([d, 'foo'], {}, {}, noop), d);
 });

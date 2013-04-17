@@ -25,18 +25,18 @@ test('findInPaths() nonesuch returns false', function(t) {
 });
 
 test('findInPaths() follows symlinks to dirs', function(t) {
-    var expected = resolve(__dirname, 'fixtures/simple'),
+    var expected = resolve(__dirname, 'fixtures/symlinked'),
         srcdir = resolve(__dirname, 'fixtures');
 
-    t.equals(fn([srcdir], 'simple'), expected);
+    t.equals(fn([srcdir], 'symlinked'), expected);
     t.end();
 });
 
 test('findInPaths() follows symlinks to files', function(t) {
-    var expected = resolve(__dirname, 'fixtures/simple/package.json.hb'),
+    var expected = resolve(__dirname, 'fixtures/symlinked/package.json.hb'),
         srcdir = resolve(__dirname, 'fixtures');
 
-    t.equals(fn([srcdir], 'simple/package.json.hb'), expected);
+    t.equals(fn([srcdir], 'symlinked/package.json.hb'), expected);
     t.end();
 });
 
