@@ -30,6 +30,18 @@ function pathify(subpath) {
     return util.findInPaths(SRCPATHS, subpath);
 }
 
+function getDestinationDir(type, dest, name) {
+    var parts = [dest || '.'];
+
+    // BC - type "mojit" goes inside mojits dir
+    if ('mojit' === type.toLowerCase()) {
+    	parts.push('mojits');
+    }
+
+    parts.push(name);
+    return path.join.apply(null, parts);
+}
+
 function subtypePath(type, args) {
     var subtype = args.length > 1 ? args.shift() : 'default';
     return path.join(type, subtype).toLowerCase(); // i.e. 'app/full'
@@ -91,7 +103,7 @@ function main(args, opts, meta, cb) {
     } else {
         keyval.name = name;
         keyval.port = opts.port || 8666;
-        destination = path.join(opts.directory || '.', name);
+        destination = getDestinationDir(type, opts.directory, name);
 
         create(source, destination, keyval, cb);
     }
