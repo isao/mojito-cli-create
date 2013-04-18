@@ -5,154 +5,212 @@ var path = require('path'),
 
 function noop() {}
 
+
+// error conditions, no side effects
+
 test('no param', function(t) {
-    t.plan(5);
+    t.plan(4);
 
     function cb(err) {
         t.true(err instanceof Error, 'instance of Error');
-        t.true(err.toString().match(/Missing parameters. Please specify a type & name./));
-        t.equal(err.usage.substring(0, 6), 'Usage:');
-        t.equal(err.code, 1);
+        t.equal(err.toString(), 'Error: No parameters.');
+        t.equal(err.usage.slice(0, 6), 'Usage:');
+        t.equal(err.errno, 3);
     }
 
-    t.same(fn([], {}, {}, cb), undefined);
+    fn([], {}, {}, cb)
 });
 
 test('missing param', function(t) {
-    t.plan(5);
+    t.plan(4);
 
     function cb(err) {
         t.true(err instanceof Error, 'instance of Error');
-        t.true(err.toString().match(/Missing parameter\(s\)[.]/));
+        t.equal(err.toString(), 'Error: Missing subtype, name or path.');
         t.equal(err.usage.substring(0, 6), 'Usage:');
-        t.equal(err.code, 3);
+        t.equal(err.errno, 3);
     }
 
-    t.same(fn(['zzz'], {}, {}, cb), undefined);
+    fn(['zzz'], {}, {}, cb);
 });
 
-test('create app foo', function(t) {
-    t.plan(1);
-    t.ok(fn(['app', 'foo'], {}, {}).match(/archetypes\/app\/default/));
-});
-
-test('create app nonesuch foo', function(t) {
-    t.plan(5);
+test('bad param', function(t) {
+    t.plan(4);
 
     function cb(err) {
         t.true(err instanceof Error, 'instance of Error');
-        t.true(err.toString().match(/Invalid subtype/));
+        t.equal(err.toString(), 'Error: omfg is not a valid archetype or path.');
         t.equal(err.usage.substring(0, 6), 'Usage:');
-        t.equal(err.code, 5);
+        t.equal(err.errno, 5);
     }
 
-    t.false(fn(['app', 'nonesuch', 'foo'], {}, {}, cb));
-});
-
-test('create mojit nonesuch foo', function(t) {
-    t.plan(5);
-
-    function cb(err) {
-        t.true(err instanceof Error, 'instance of Error');
-        t.true(err.toString().match(/Invalid subtype/));
-        t.equal(err.usage.substring(0, 6), 'Usage:');
-        t.equal(err.code, 5);
-    }
-
-    t.false(fn(['mojit', 'nonesuch', 'foo'], {}, {}, cb));
-});
-
-test('create app {default,simple,full,yahoo} foo', function(t) {
-    t.plan(4);
-    t.true(fn(['app', 'default', 'foo'], {}, {}, noop).match(/archetypes\/app\/default/));
-    t.true(fn(['app', 'simple', 'foo'], {}, {}, noop).match(/archetypes\/app\/simple/));
-    t.true(fn(['app', 'full', 'foo'], {}, {}, noop).match(/archetypes\/app\/full/));
-    t.true(fn(['app', 'yahoo', 'foo'], {}, {}, noop).match(/archetypes\/app\/yahoo/));
-});
-
-test('"special" values type and subtype are lower-cased', function(t) {
-    t.plan(4);
-    t.true(fn(['App', 'defAULt', 'foo'], {}, {}, noop).match(/archetypes\/app\/default/));
-    t.true(fn(['aPP', 'simPLE', 'foo'], {}, {}, noop).match(/archetypes\/app\/simple/));
-    t.true(fn(['app', 'FULL', 'foo'], {}, {}, noop).match(/archetypes\/app\/full/));
-    t.true(fn(['APP', 'Yahoo', 'foo'], {}, {}, noop).match(/archetypes\/app\/yahoo/));
-});
-
-test('create app {default,simple,full,yahoo} foo', function(t) {
-    t.plan(4);
-    t.true(fn(['app', 'default', 'foo'], {}, {}, noop).match(/archetypes\/app\/default/));
-    t.true(fn(['app', 'simple', 'foo'], {}, {}, noop).match(/archetypes\/app\/simple/));
-    t.true(fn(['app', 'full', 'foo'], {}, {}, noop).match(/archetypes\/app\/full/));
-    t.true(fn(['app', 'yahoo', 'foo'], {}, {}, noop).match(/archetypes\/app\/yahoo/));
-});
-
-test('create mojit {default,simple,full,yahoo} foo', function(t) {
-    t.plan(4);
-    t.true(fn(['mojit', 'default', 'foo'], {}, {}, noop).match(/archetypes\/mojit\/default/));
-    t.true(fn(['mojit', 'simple', 'foo'], {}, {}, noop).match(/archetypes\/mojit\/simple/));
-    t.true(fn(['mojit', 'full', 'foo'], {}, {}, noop).match(/archetypes\/mojit\/full/));
-    t.false(fn(['mojit', 'yahoo', 'foo'], {}, {}, noop));
-});
-
-test('create custom nonesuch foo', function(t) {
-    t.plan(5);
-
-    function cb(err) {
-        t.true(err instanceof Error, 'instance of Error');
-        t.true(err.toString().match(/Custom archtype path is invalid/));
-        t.equal(err.usage.substring(0, 6), 'Usage:');
-        t.equal(err.code, 5);
-    }
-
-    t.false(fn(['custom', 'nonesuch', 'foo'], {}, {}, cb));
+    fn(['omfg', 'bieber'], {}, {}, cb);
 });
 
 test('create custom nonesuch/path', function(t) {
-    t.plan(5);
+    t.plan(4);
 
     function cb(err) {
         t.true(err instanceof Error, 'instance of Error');
         t.equal(err.toString(), 'Error: Custom archtype path is invalid.');
         t.equal(err.usage.substring(0, 6), 'Usage:');
-        t.equal(err.code, 5);
+        t.equal(err.errno, 5);
     }
 
-    t.false(fn(['custom', 'nonesuch/path'], {}, {}, cb));
+    fn(['custom', 'nonesuch/path'], {}, {}, cb)
 });
 
-test('create custom fixtures (missing name)', function(t) {
-    t.plan(5);
+test('create custom path (missing name)', function(t) {
+    t.plan(4);
 
     function cb(err) {
         t.true(err instanceof Error, 'instance of Error');
         t.equal(err.toString(), 'Error: Missing name.');
         t.equal(err.usage.substring(0, 6), 'Usage:');
-        t.equal(err.code, 3);
+        t.equal(err.errno, 3);
     }
 
-    var d = path.join(__dirname, 'fixtures');
-
-    t.equal(fn(['custom', d], {}, {}, cb), d);
+    var d = path.join(__dirname, 'fixtures', 'symlinked');
+    fn(['custom', d], {}, {}, cb);
 });
 
 test('create path/to/fixtures (missing name)', function(t) {
-    t.plan(5);
+    t.plan(4);
 
     function cb(err) {
         t.true(err instanceof Error, 'instance of Error');
-        t.equal(err.toString(), 'Error: Missing parameter(s).');
+        t.equal(err.toString(), 'Error: Missing subtype, name or path.');
         t.equal(err.usage.substring(0, 6), 'Usage:');
-        t.equal(err.code, 3);
+        t.equal(err.errno, 3);
     }
 
     var d = path.join(__dirname, 'fixtures', 'symlinked');
-
-    t.equal(fn([d], {}, {}, cb), undefined);
+    fn([d], {}, {}, cb)
 });
 
-test('create path/to/fixtures foo', function(t) {
-    t.plan(1);
+// fn.test.getSourceDir tests
 
-    var d = path.join(__dirname, 'fixtures', 'symlinked');
-    t.equal(fn([d, 'foo'], {}, {}, noop), d);
+test('getSourceDir app foo', function(t) {
+    var actual = fn.test.getSourceDir('app', ['foo']),
+        expected = 'archetypes/app/default';
+
+    t.equal(actual.slice(-expected.length), expected);
+    t.end();
+});
+
+test('getSourceDir app nonesuch foo', function(t) {
+    var actual = fn.test.getSourceDir('app', ['nonesuch', 'foo']);
+
+    t.ok(actual instanceof Error);
+    t.equal(actual.toString(), 'Error: Invalid subtype.');
+    t.equal(actual.errno, 5);
+    t.equal(actual.usage.slice(0, 6), 'Usage:');
+    t.end();
+});
+
+test('getSourceDir app default foo', function(t) {
+    var actual = fn.test.getSourceDir('app', ['default', 'foo']),
+        expected = 'archetypes/app/default';
+
+    t.equal(actual.slice(-expected.length), expected);
+    t.end();
+});
+
+test('getSourceDir app simple foo', function(t) {
+    var actual = fn.test.getSourceDir('app', ['simple', 'foo']),
+        expected = 'archetypes/app/simple';
+
+    t.equal(actual.slice(-expected.length), expected);
+    t.end();
+});
+
+test('getSourceDir app full foo', function(t) {
+    var actual = fn.test.getSourceDir('app', ['full', 'foo']),
+        expected = 'archetypes/app/full';
+
+    t.equal(actual.slice(-expected.length), expected);
+    t.end();
+});
+
+test('getSourceDir app yahoo foo', function(t) {
+    var actual = fn.test.getSourceDir('app', ['yahoo', 'foo']),
+        expected = 'archetypes/app/yahoo';
+
+    t.equal(actual.slice(-expected.length), expected);
+    t.end();
+});
+
+test('getSourceDir mojit default foo', function(t) {
+    var actual = fn.test.getSourceDir('mojit', ['default', 'foo']),
+        expected = 'archetypes/mojit/default';
+
+    t.equal(actual.slice(-expected.length), expected);
+    t.end();
+});
+
+test('getSourceDir mojit simple foo', function(t) {
+    var actual = fn.test.getSourceDir('mojit', ['simple', 'foo']),
+        expected = 'archetypes/mojit/simple';
+
+    t.equal(actual.slice(-expected.length), expected);
+    t.end();
+});
+
+test('getSourceDir mojit full foo', function(t) {
+    var actual = fn.test.getSourceDir('mojit', ['full', 'foo']),
+        expected = 'archetypes/mojit/full';
+
+    t.equal(actual.slice(-expected.length), expected);
+    t.end();
+});
+
+test('type and subtype case-insensitive', function(t) {
+    var actual, expected;
+    
+    actual = fn.test.getSourceDir('APP', ['FULL', 'foo']);
+    expected = 'archetypes/app/full';
+    t.equal(actual.slice(-expected.length), expected);
+
+    actual = fn.test.getSourceDir('aPP', ['Full', 'foo']),
+    t.equal(actual.slice(-expected.length), expected);
+
+    actual = fn.test.getSourceDir('mOJit', ['sIMPle', 'foo']);
+    expected = 'archetypes/mojit/simple';
+    t.equal(actual.slice(-expected.length), expected);
+
+    actual = fn.test.getSourceDir('mOJit', ['DEFAULT', 'foo']);
+    expected = 'archetypes/mojit/default';
+    t.equal(actual.slice(-expected.length), expected);
+
+    t.end();
+});
+
+test('getSourceDir custom nonesuch foo', function(t) {
+    var actual = fn.test.getSourceDir('custom', ['nonesuch', 'foo']);
+
+    t.ok(actual instanceof Error);
+    t.equal(actual.toString(), 'Error: Custom archtype path is invalid.');
+    t.equal(actual.errno, 5);
+    t.equal(actual.usage.slice(0, 6), 'Usage:');
+    t.end();
+});
+
+test('getSourceDir nonesuch foo', function(t) {
+    var actual = fn.test.getSourceDir('nonesuch', ['foo']);
+
+    t.ok(actual instanceof Error);
+    t.equal(actual.toString(), 'Error: nonesuch is not a valid archetype or path.');
+    t.equal(actual.errno, 5);
+    t.equal(actual.usage.slice(0, 6), 'Usage:');
+    t.end();
+});
+
+test('getSourceDir nonesuch nonesuch foo', function(t) {
+    var actual = fn.test.getSourceDir('nonesuch', ['nonesuch', 'foo']);
+
+    t.ok(actual instanceof Error);
+    t.equal(actual.toString(), 'Error: nonesuch is not a valid archetype or path.');
+    t.equal(actual.errno, 5);
+    t.equal(actual.usage.slice(0, 6), 'Usage:');
+    t.end();
 });
