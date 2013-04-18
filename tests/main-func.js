@@ -47,18 +47,38 @@ test('[func] create app simple simpleapp', function(t) {
 });
 
 test('[func] create custom fixtures/barefile.txt.hb', function(t) {
-    var dest = path.join(__dirname, 'artifacts'),
+    var name = 'myfile' + process.pid + '.txt',
+        dest = path.join(__dirname, 'artifacts'),
         opts = {directory: dest},
-        archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb');
-        args = ['custom', archetype, 'myfile' + process.pid + '.txt'];
+        archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb'),
+        args = ['custom', archetype, name];
 
     t.plan(1);
 
     function cb(err, msg) {
-        //var newfile = path.join(dest, 'myfile.txt');
+        var newfile = path.join(dest, name);
 
         t.false(err instanceof Error, 'no error');
-        //t.ok(fs.statSync(newfile).isFile());
+        t.ok(fs.statSync(newfile).isFile());
+    }
+
+    fn(args, opts, {}, cb);
+});
+
+test('[func] barefile source with dest dir that needs mkdirp', function(t) {
+    var name = 'myfile' + process.pid + '.txt',
+        dest = path.join(__dirname, 'artifacts', 'newdest' + process.pid),
+        opts = {directory: dest},
+        archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb'),
+        args = ['custom', archetype, name];
+
+    t.plan(1);
+
+    function cb(err, msg) {
+        var newfile = path.join(dest, name);
+
+        t.false(err instanceof Error, 'no error');
+        t.ok(fs.statSync(newfile).isFile());
     }
 
     fn(args, opts, {}, cb);
