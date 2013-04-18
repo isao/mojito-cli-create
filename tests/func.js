@@ -4,8 +4,10 @@ var path = require('path'),
     fn = require('../');
 
 
-test('[func] create --directory fixtures/maintest', function(t) {
-    var opts = {directory: path.join(__dirname, 'artifacts', 'maintest')},
+// these tests create files/dirs in tests/artifacts
+
+test('[func] create --directory maintest', function(t) {
+    var opts = {directory: path.join(__dirname, 'artifacts', 'maintest' + process.pid)},
         args = ['mojit', 'simple', 'simplemojit'];
 
     t.plan(3);
@@ -19,17 +21,17 @@ test('[func] create --directory fixtures/maintest', function(t) {
     fn(args, opts, {}, cb);
 });
 
-
 test('[func] create app simple simpleapp', function(t) {
     var opts = {},
-        args = ['app', 'simple', 'simpleapp'],
+        name = 'simpleapp' + process.pid,
+        args = ['app', 'simple', name],
         oldcwd = process.cwd(),
         tmpcwd = path.resolve(__dirname, 'artifacts');
 
     t.plan(4);
 
     function cb(err, msg) {
-        var dest = path.join(tmpcwd, 'simpleapp');
+        var dest = path.join(tmpcwd, name);
 
         t.equal(tmpcwd, process.cwd());
         t.false(err instanceof Error, 'no error');
@@ -48,7 +50,7 @@ test('[func] create custom fixtures/barefile.txt.hb', function(t) {
     var dest = path.join(__dirname, 'artifacts'),
         opts = {directory: dest},
         archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb');
-        args = ['custom', archetype, 'myfile.txt'];
+        args = ['custom', archetype, 'myfile' + process.pid + '.txt'];
 
     t.plan(1);
 

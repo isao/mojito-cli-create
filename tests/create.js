@@ -10,7 +10,7 @@ log.pause();
 
 test('[func] create from fixtures/symlinked', function(t) {
     var from = resolve(__dirname, 'fixtures', 'symlinked'),
-        to = resolve(__dirname, 'artifacts', 'symlinked-' + process.pid),
+        to = resolve(__dirname, 'artifacts', 'symlinked' + process.pid),
         data = {port:98765, name:'MyAppName'},
 
         expected_count = 6,
