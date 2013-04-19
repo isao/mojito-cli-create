@@ -47,7 +47,7 @@ test('[func] create app simple simpleapp', function(t) {
 });
 
 test('[func] create custom fixtures/barefile.txt.hb', function(t) {
-    var name = 'myfile' + process.pid + '.txt',
+    var name = 'myfile-missing-key' + process.pid + '.txt',
         dest = path.join(__dirname, 'artifacts'),
         opts = {directory: dest},
         archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb'),
@@ -64,6 +64,26 @@ test('[func] create custom fixtures/barefile.txt.hb', function(t) {
 
     fn(args, opts, {}, cb);
 });
+
+test('[func] create custom fixtures/barefile.txt.hb', function(t) {
+    var name = 'myfile-mykey' + process.pid + '.txt',
+        dest = path.join(__dirname, 'artifacts'),
+        opts = {directory: dest, keyval: 'mykey:myval'},
+        archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb'),
+        args = ['custom', archetype, name];
+
+    t.plan(2);
+
+    function cb(err, msg) {
+        var newfile = path.join(dest, name);
+
+        t.false(err instanceof Error, 'no error');
+        t.ok(fs.statSync(newfile).isFile());
+    }
+
+    fn(args, opts, {}, cb);
+});
+
 
 test('[func] barefile source with dest dir that needs mkdirp', function(t) {
     var name = 'myfile' + process.pid + '.txt',
