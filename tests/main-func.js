@@ -53,7 +53,7 @@ test('[func] create custom fixtures/barefile.txt.hb', function(t) {
         archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb'),
         args = ['custom', archetype, name];
 
-    t.plan(1);
+    t.plan(2);
 
     function cb(err, msg) {
         var newfile = path.join(dest, name);
@@ -72,7 +72,7 @@ test('[func] barefile source with dest dir that needs mkdirp', function(t) {
         archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb'),
         args = ['custom', archetype, name];
 
-    t.plan(1);
+    t.plan(2);
 
     function cb(err, msg) {
         var newfile = path.join(dest, name);
