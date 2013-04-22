@@ -27,15 +27,14 @@ function errorWithUsage(msg, exit_code) {
 }
 
 function pathify(subpath) {
-    return util.findInPaths(SRCPATHS, subpath);
+    return util.findInPaths(SRCPATHS, subpath); // full path if exists, or false
 }
 
 function getDestinationDir(type, dest, name) {
     var parts = [dest || '.'];
 
-    // BC - type "mojit" goes inside mojits dir
     if ('mojit' === type.toLowerCase()) {
-    	parts.push('mojits');
+        parts.push('mojits'); // BC - type "mojit" goes inside mojits dir
     }
 
     parts.push(name);
@@ -67,6 +66,7 @@ function getSourceDir(type, args) {
 
     default:
         // 3. mojito create [options] <path/to/archetype> <name>
+        //    (this *should* be the only supported syntax)
         source = pathify(type);
         err = type + ' is not a valid archetype or path.';
     }
@@ -75,7 +75,7 @@ function getSourceDir(type, args) {
 }
 
 function amMissingArgs(type, args) {
-    var err;
+    var err = false;
 
     if (!type) {
         err = 'No parameters.';
