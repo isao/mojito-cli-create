@@ -12,7 +12,7 @@ var path = require('path'),
     create = require('./lib/create'),
 
     // todo: enable user configuration
-    SRCPATHS = ['.', path.resolve(__dirname, 'archetypes')];
+    SRCPATHS = [path.resolve(__dirname, 'archetypes'), '.'];
 
 
 function error(msg, exit_code) {
