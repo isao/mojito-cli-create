@@ -39,7 +39,7 @@ function getDestinationDir(type, dest, name) {
     }
 
     parts.push(name);
-    return path.join.apply(null, parts);
+    return path.resolve.apply(null, parts);
 }
 
 function subtypePath(type, args) {
@@ -106,9 +106,9 @@ function main(args, opts, meta, cb) {
         cb(errorWithUsage('Missing name.', 3));
 
     } else {
-        keyval.name = name;
-        keyval.port = opts.port || 8666;
         dest = getDestinationDir(type, opts.directory, name);
+        keyval.name = opts.name || path.basename(dest);
+        keyval.port = opts.port || 8666;
 
         log.info('Source: %s', source);
         log.info('Destination: %s', dest);
