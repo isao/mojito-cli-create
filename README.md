@@ -1,4 +1,4 @@
-mojito-create
+mojito-create  [![Build Status](https://travis-ci.org/yahoo/mojito-create.png)](https://travis-ci.org/yahoo/mojito-create)
 =============
 
 This package provides the `create` command for the [`mojito-cli`](https://github.com/yahoo/mojito-cli) tool.
