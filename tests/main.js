@@ -34,6 +34,21 @@ test('missing param', function(t) {
     fn(['zzz'], {}, {}, cb);
 });
 
+test('missing param, --debug', function(t) {
+    var opts = {debug: true};
+
+    t.plan(4);
+
+    function cb(err) {
+        t.true(err instanceof Error, 'instance of Error');
+        t.equal(err.toString(), 'Error: Missing subtype, name or path.');
+        t.equal(err.usage.substring(0, 6), 'Usage:');
+        t.equal(err.errno, 3);
+    }
+
+    fn(['zzz'], opts, {}, cb);
+});
+
 test('bad param', function(t) {
     t.plan(4);
 

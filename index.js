@@ -8,6 +8,7 @@
 var path = require('path'),
     log = require('./lib/log'),
     util = require('./lib/utils'),
+    npmi = require('./lib/npmi'),
     create = require('./lib/create'),
 
     // todo: enable user configuration
@@ -92,7 +93,11 @@ function main(args, opts, meta, cb) {
         source = amMissingArgs(type, args) || getSourceDir(type, args),
         name = args.shift(),
         keyval = util.parseCsvObj(opts.keyval),
-        destination;
+        dest;
+
+    if (opts.debug) {
+        log.level = 'debug';
+    }
 
     if (source instanceof Error) {
         cb(source);
@@ -103,9 +108,20 @@ function main(args, opts, meta, cb) {
     } else {
         keyval.name = name;
         keyval.port = opts.port || 8666;
-        destination = getDestinationDir(type, opts.directory, name);
+        dest = getDestinationDir(type, opts.directory, name);
 
-        create(source, destination, keyval, cb);
+        log.info('Source: %s', source);
+        log.info('Destination: %s', dest);
+
+        create(source, dest, keyval, function(err) {
+            if (!err && ('app' === type)) {
+                log.info('Ok, "%s" created.', dest);
+                log.info('Installing mojito application "' + dest + '’s" dependencies with npm.');
+                npmi(dest, 'npm -s i', cb);
+            } else {
+                cb(err, 'Done.');
+            }
+        });
     }
 }
 

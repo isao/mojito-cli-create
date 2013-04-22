@@ -14,7 +14,7 @@ test('[func] create --directory maintest', function(t) {
 
     function cb(err, msg) {
         t.false(err instanceof Error);
-        t.equal(msg, 2);
+        t.equal(msg, 'Done.');
         t.equal(arguments.length, 2);
     }
 

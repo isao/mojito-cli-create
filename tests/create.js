@@ -41,7 +41,7 @@ test('create nonesuch', function(t) {
     t.plan(6);
 
     function cb(err, msg) {
-        t.false(err, 'null error');
+        t.true(err, 'has error');
     }
 
     scan = fn(from, to, {}, cb);
