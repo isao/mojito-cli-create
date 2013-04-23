@@ -3,7 +3,7 @@ var test = require('tap').test,
     log = require('../lib/log'),
 
     fn = require('../lib/npmi'),
-    mock = path.resolve(__dirname, 'fixtures', 'mocknpm.sh');
+    mock = path.resolve(__dirname, 'fixtures', 'mockpath1', 'npm');
 
 
 log.pause();

@@ -48,7 +48,7 @@ test('[func] create app simple simpleapp FIXME', function(t) {
     fs.mkdir(tmpcwd, function() {
         process.chdir(tmpcwd);
         // mock exec hack
-        fn.npmcmd = path.join(__dirname, 'fixtures', 'mocknpm.sh') + ' 0';
+        fn.npmcmd = path.join(__dirname, 'fixtures', 'mockpath1', 'npm') + ' 0';
         fn(args, opts, {}, cb);
     });
 });
