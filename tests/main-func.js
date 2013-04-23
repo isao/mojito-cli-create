@@ -5,8 +5,8 @@ var path = require('path'),
     test = require('tap').test,
 
     fn = require('../'),
-    
-    
+
+
     artifacts = path.resolve(__dirname, 'artifacts'),
 
     mockpath = path.resolve(__dirname, 'fixtures', 'mockbin', 'npm-ok'),
