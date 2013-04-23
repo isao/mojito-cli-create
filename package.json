@@ -5,15 +5,17 @@
   "dependencies": {
     "mkdirp": "~0.3.5",
     "npmlog": "0.0.2",
+    "rimraf": "~2.1.4",
     "scanfs": "0.0.2",
-    "through": "~2.3.1"
+    "through": "~2.3.1",
+    "which": "~1.0.5"
   },
   "devDependencies": {
     "tap": "~0.4.1"
   },
   "scripts": {
     "test": "node tests",
-    "lint": "jshint {.,commands,lib}/*.js && echo ok",
+    "lint": "ls {.,lib}/*.js | xargs jshint",
     "clean": "git clean -dfx {.,tests}/artifacts",
     "cover": "istanbul cover --dir artifacts/coverage tests",
     "bumppatch": "npm version patch -m \"tag v%s (based on $(git describe))\""
@@ -26,11 +28,11 @@
   "contributors": [
     "Chris Klaiber <cklaiber@yahoo-inc.com>",
     "Drew Folta <folta@yahoo-inc.com>",
-    "Isao Yagi <isao@yahoo-inc.com>",
     "Martin Cooper <mcooper@yahoo-inc.com>",
     "Matt Taylor <mtaylor@yahoo-inc.com>",
     "Ric Allinson <allinson@yahoo-inc.com>"
   ],
+  "author": "Isao Yagi <isao@yahoo-inc.com>",
   "license": "BSD",
   "readmeFilename": "README.md",
   "keywords": [
