@@ -99,16 +99,6 @@ function main(args, opts, meta, cb) {
         keyval = util.parseCsvObj(opts.keyval),
         dest;
 
-    function npmCb(err) {
-        if (!err && ('app' === type)) {
-            log.info('Ok, "%s" created.', name);
-            log.info('Installing mojito application "' + dest + '’s" dependencies with npm.');
-            npmi(exports.npmcmd, dest, cb);
-        } else {
-            cb(err, 'Done.');
-        }
-    }
-
     if (opts.debug) {
         log.level = 'debug';
     }
@@ -136,6 +126,16 @@ function main(args, opts, meta, cb) {
 
     log.info('Source: %s', source);
     log.info('Destination: %s', dest);
+
+    function npmCb(err) {
+        if (!err && ('app' === type)) {
+            log.info('Ok, "%s" created.', name);
+            log.info('Installing mojito application "' + dest + '’s" dependencies with npm.');
+            npmi(exports.npmcmd, dest, cb);
+        } else {
+            cb(err, 'Done.');
+        }
+    }
 
     create(source, dest, keyval, npmCb);
 }
