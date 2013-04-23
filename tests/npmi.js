@@ -3,40 +3,64 @@ var test = require('tap').test,
     log = require('../lib/log'),
 
     fn = require('../lib/npmi'),
-    mock = path.resolve(__dirname, 'fixtures', 'mockpath1', 'npm');
+    mockpath = path.resolve(__dirname, 'fixtures', 'mockbin'),
+    oldpath = process.env.PATH;
 
 
 log.pause();
 
-test('exec fail', function(t) {
-    t.plan(2);
+test('no *npm', function(t) {
+    t.plan(4);
+    process.env.PATH = mockpath;
 
     function cb(err, msg) {
-        t.equal(msg, 'Done.');
-        t.equal(err.message.trim(), 'Command failed: test: stderr');
+        t.ok(err instanceof Error);
+        t.ok(err.errno > 0);
+        t.equal(err.message, 'npm or ynpm was not found in your shell path.');
+        t.equal(msg, undefined);
+        process.env.PATH = oldpath;
     }
 
-    fn(mock + ' 1', path.join(__dirname, 'fixtures'), cb);
+    fn('.', cb);
 });
 
-test('exec "ok"', function(t) {
-    t.plan(2);
+test('npm-fail', function(t) {
+    t.plan(4);
+    process.env.PATH = path.join(mockpath, 'npm-fail');
 
     function cb(err, msg) {
-        t.equal(msg, 'Done.');
-        t.equal(err, null);
+        t.ok(err instanceof Error);
+        t.equal(err.errno, 7);
+        t.equal(err.message, 'Installing dependencies failed.');
+        t.equal(msg, '');
+        process.env.PATH = oldpath;
     }
 
-    fn(mock + ' 0', path.join(__dirname, 'fixtures'), cb);
+    fn('.', cb);
 });
 
-test('exec "ok" &>/dev/null', function(t) {
+test('npm-ok', function(t) {
     t.plan(2);
+    process.env.PATH = path.join(mockpath, 'npm-ok');
 
     function cb(err, msg) {
+        t.same(err, null);
         t.equal(msg, 'Done.');
-        t.equal(err, null);
+        process.env.PATH = oldpath;
     }
 
-    fn(mock + ' 0 &>/dev/null', path.join(__dirname, 'fixtures'), cb);
+    fn('.', cb);
+});
+
+test('ynpm-ok', function(t) {
+    t.plan(2);
+    process.env.PATH = path.join(mockpath, 'ynpm-ok');
+
+    function cb(err, msg) {
+        t.same(err, null);
+        t.equal(msg, 'Done.');
+        process.env.PATH = oldpath;
+    }
+
+    fn('.', cb);
 });

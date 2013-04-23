@@ -1,16 +1,25 @@
 var path = require('path'),
     fs = require('fs'),
+    mkdirp = require('mkdirp').sync,
     log = require('../lib/log'),
     test = require('tap').test,
-    fn = require('../');
+
+    fn = require('../'),
+    
+    
+    artifacts = path.resolve(__dirname, 'artifacts'),
+
+    mockpath = path.resolve(__dirname, 'fixtures', 'mockbin', 'npm-ok'),
+    oldpath = process.env.PATH;
 
 
 log.pause();
 
+mkdirp(path.join(__dirname, 'artifacts'));
 
 // these tests create files/dirs in tests/artifacts //
 
-test('[func] create --directory maintest', function(t) {
+test('[func] create mojit --directory maintest', function(t) {
     var opts = {directory: path.join(__dirname, 'artifacts', 'maintest' + process.pid)},
         args = ['mojit', 'simple', 'simplemojit'];
 
@@ -25,32 +34,31 @@ test('[func] create --directory maintest', function(t) {
     fn(args, opts, {}, cb);
 });
 
-test('[func] create app simple simpleapp FIXME', function(t) {
+// hacks process path & cwd //
+// creates tests/artifacts/simpleapp + pid
+test('[func] create app simple FIXME', function(t) {
     var opts = {},
         name = 'simpleapp' + process.pid,
         args = ['app', 'simple', name],
-        oldcwd = process.cwd(),
-        tmpcwd = path.resolve(__dirname, 'artifacts');
+        oldcwd = process.cwd();
 
     t.plan(5);
 
     function cb(err, msg) {
-        var dest = path.join(tmpcwd, name);
+        var dest = path.join(artifacts, name);
 
-        t.equal(tmpcwd, process.cwd());
+        t.equal(artifacts, process.cwd());
         t.false(err instanceof Error, 'no error');
         t.same(msg, 'Done.');
         t.ok(fs.statSync(dest).isDirectory());
         t.ok(fs.statSync(path.join(dest, 'server.js')).isFile());
         process.chdir(oldcwd);
+        process.env.PATH = oldpath;
     }
 
-    fs.mkdir(tmpcwd, function() {
-        process.chdir(tmpcwd);
-        // mock exec hack
-        fn.npmcmd = path.join(__dirname, 'fixtures', 'mockpath1', 'npm') + ' 0';
-        fn(args, opts, {}, cb);
-    });
+    process.chdir(artifacts);
+    process.env.PATH = mockpath;
+    fn(args, opts, {}, cb);
 });
 
 test('[func] create custom fixtures/barefile.txt.hb', function(t) {

@@ -1,5 +1,5 @@
 #!/bin/sh -e
 exitcode=7
-echo 'test: stderr' >&2
-echo "test: the exit code will be $exitcode"
+# echo 'test: stderr' >&2
+# echo "test: the exit code will be $exitcode"
 exit $exitcode
