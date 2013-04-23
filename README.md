@@ -1,4 +1,4 @@
-mojito-create
+mojito-create  [![Build Status](https://travis-ci.org/yahoo/mojito-create.png)](https://travis-ci.org/yahoo/mojito-create)
 =============
 
 This package provides the `create` command for the [`mojito-cli`](https://github.com/yahoo/mojito-cli) tool.
@@ -38,7 +38,7 @@ You can copy the [built-in](https://github.com/yahoo/mojito-create/tree/master/a
 
     $ mojito create custom <path/to/archtype> <name>
 
-If a file in the archetype source ends with ".hb" then the contents of the file will be treated like a [handlebars](http://handlebarsjs.com/) template, with key/value replacement done for the following:
+If a file in the archetype source ends with ".hb" then the contents of the file will have key/value replacement done for the following:
 
 * `{{port}}` -> default port number 8666 or the value passed by option `--port`
 * `{{name}}` -> the name passed as the last command line argument that is not a flag or option, like `--port`

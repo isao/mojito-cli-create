@@ -1,0 +1,7 @@
+test file
+
+name is myfile.txt
+port is 8666
+
+if mykey is specified (like --keyval mykey:myval),
+then this is it's value: myval
