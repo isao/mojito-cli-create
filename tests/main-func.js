@@ -1,10 +1,14 @@
 var path = require('path'),
     fs = require('fs'),
+    log = require('../lib/log'),
     test = require('tap').test,
     fn = require('../');
 
 
-// these tests create files/dirs in tests/artifacts
+log.pause();
+
+
+// these tests create files/dirs in tests/artifacts //
 
 test('[func] create --directory maintest', function(t) {
     var opts = {directory: path.join(__dirname, 'artifacts', 'maintest' + process.pid)},
@@ -21,20 +25,21 @@ test('[func] create --directory maintest', function(t) {
     fn(args, opts, {}, cb);
 });
 
-test('[func] create app simple simpleapp', function(t) {
+test('[func] create app simple simpleapp FIXME', function(t) {
     var opts = {},
         name = 'simpleapp' + process.pid,
         args = ['app', 'simple', name],
         oldcwd = process.cwd(),
         tmpcwd = path.resolve(__dirname, 'artifacts');
 
-    t.plan(4);
+    t.plan(5);
 
     function cb(err, msg) {
         var dest = path.join(tmpcwd, name);
 
         t.equal(tmpcwd, process.cwd());
         t.false(err instanceof Error, 'no error');
+        t.same(msg, 'Done.');
         t.ok(fs.statSync(dest).isDirectory());
         t.ok(fs.statSync(path.join(dest, 'server.js')).isFile());
         process.chdir(oldcwd);
@@ -42,6 +47,8 @@ test('[func] create app simple simpleapp', function(t) {
 
     fs.mkdir(tmpcwd, function() {
         process.chdir(tmpcwd);
+        // mock exec hack
+        fn.npmcmd = path.join(__dirname, 'fixtures', 'mocknpm.sh') + ' 0';
         fn(args, opts, {}, cb);
     });
 });
@@ -59,7 +66,7 @@ test('[func] create custom fixtures/barefile.txt.hb', function(t) {
         var newfile = path.join(dest, name);
 
         t.false(err instanceof Error, 'no error');
-        t.ok(fs.statSync(newfile).isFile());
+        t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
     }
 
     fn(args, opts, {}, cb);
@@ -78,7 +85,7 @@ test('[func] create custom fixtures/barefile.txt.hb', function(t) {
         var newfile = path.join(dest, name);
 
         t.false(err instanceof Error, 'no error');
-        t.ok(fs.statSync(newfile).isFile());
+        t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
     }
 
     fn(args, opts, {}, cb);
@@ -98,7 +105,7 @@ test('[func] barefile source with dest dir that needs mkdirp', function(t) {
         var newfile = path.join(dest, name);
 
         t.false(err instanceof Error, 'no error');
-        t.ok(fs.statSync(newfile).isFile());
+        t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
     }
 
     fn(args, opts, {}, cb);

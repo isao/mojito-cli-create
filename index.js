@@ -115,9 +115,9 @@ function main(args, opts, meta, cb) {
 
         create(source, dest, keyval, function(err) {
             if (!err && ('app' === type)) {
-                log.info('Ok, "%s" created.', dest);
+                log.info('Ok, "%s" created.', name);
                 log.info('Installing mojito application "' + dest + '’s" dependencies with npm.');
-                npmi(dest, 'npm -s i', cb);
+                npmi(exports.npmcmd, dest, cb);
             } else {
                 cb(err, 'Done.');
             }
@@ -152,6 +152,8 @@ exports.options = [
     {shortName: 'p', hasValue: true,  longName: 'port'}
 ];
 
+// test hacks
+exports.npmcmd = 'npm -s i';
 exports.test = {
     getSourceDir: getSourceDir
 };
