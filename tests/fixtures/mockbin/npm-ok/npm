@@ -1,0 +1,5 @@
+#!/bin/sh -e
+exitcode=0
+echo 'test: stderr' >&2
+echo "test: the exit code will be $exitcode"
+exit $exitcode
