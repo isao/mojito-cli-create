@@ -11,18 +11,12 @@ var path = require('path'),
     npmi = require('./lib/npmi'),
     create = require('./lib/create'),
 
-    // todo: enable user configuration
+    // todo: make user configurable
     SRCPATHS = [path.resolve(__dirname, 'archetypes'), '.'];
 
 
-function error(msg, exit_code) {
-    var err = new Error(msg);
-    err.errno = exit_code;
-    return err;
-}
-
-function errorWithUsage(msg, exit_code) {
-    var err = error(msg, exit_code);
+function errorWithUsage(code, msg) {
+    var err = util.error(code, msg);
     err.usage = module.exports.usage;
     return err;
 }
@@ -76,7 +70,7 @@ function getSourceDir(type, args) {
         err = type + ' is not a valid archetype or path.';
     }
 
-    return source || errorWithUsage(err, 5);
+    return source || errorWithUsage(5, err);
 }
 
 function amMissingArgs(type, args) {
@@ -89,7 +83,7 @@ function amMissingArgs(type, args) {
         err = 'Missing subtype, name or path.';
     }
 
-    return err && errorWithUsage(err, 3);
+    return err && errorWithUsage(3, err);
 }
 
 function main(args, opts, meta, cb) {
@@ -108,11 +102,11 @@ function main(args, opts, meta, cb) {
         return;
 
     } else if (!name) {
-        cb(errorWithUsage('Missing name.', 3));
+        cb(errorWithUsage(3, 'Missing name.'));
         return;
 
     } else if (checkName(name)) {
-        cb(error('Path separators not allowed in names.', 3));
+        cb(util.error(3, 'Path separators not allowed in names.'));
         return;
     }
 
@@ -131,7 +125,7 @@ function main(args, opts, meta, cb) {
         if (!err && ('app' === type)) {
             log.info('Ok, "%s" created.', name);
             log.info('Installing mojito application "' + dest + '’s" dependencies with npm.');
-            npmi(exports.npmcmd, dest, cb);
+            npmi(dest, cb);
         } else {
             cb(err, 'Done.');
         }
@@ -167,10 +161,6 @@ exports.options = [
     {shortName: 'p', hasValue: true,  longName: 'port'}
 ];
 
-// test hacks
-exports.npmcmd = 'npm -s i';
-exports.test = {
-    getSourceDir: getSourceDir
-};
+exports.test = {getSourceDir: getSourceDir};
 
 module.exports = exports;
