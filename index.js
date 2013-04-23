@@ -35,8 +35,8 @@ function checkName(name) {
     return name.indexOf(path.sep) !== -1;
 }
 
-function getDestinationDir(type, dest, name) {
-    var parts = [dest || '.'];
+function getDestinationDir(type, destopt, name) {
+    var parts = [destopt || '.'];
 
     if ('mojit' === type.toLowerCase()) {
         parts.push('mojits'); // BC - type "mojit" goes inside mojits dir
@@ -115,23 +115,29 @@ function main(args, opts, meta, cb) {
 
     if (source instanceof Error) {
         cb(source);
+        return;
 
     } else if (!name) {
         cb(errorWithUsage('Missing name.', 3));
+        return;
 
     } else if (checkName(name)) {
         cb(error('Path separators not allowed in names.', 3));
-
-    } else {
-        dest = getDestinationDir(type, opts.directory, name);
-        keyval.name = opts.name || path.basename(dest);
-        keyval.port = opts.port || 8666;
-
-        log.info('Source: %s', source);
-        log.info('Destination: %s', dest);
-
-        create(source, dest, keyval, npmCb);
+        return;
     }
+
+    if (('.' === name) && util.exists(source).isFile()) { // 2nd stat, fixme
+        name = path.basename(source);
+    }
+
+    dest = getDestinationDir(type, opts.directory, name);
+    keyval.name = opts.name || path.basename(dest);
+    keyval.port = opts.port || 8666;
+
+    log.info('Source: %s', source);
+    log.info('Destination: %s', dest);
+
+    create(source, dest, keyval, npmCb);
 }
 
 exports = main;

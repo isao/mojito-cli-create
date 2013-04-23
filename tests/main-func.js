@@ -91,6 +91,24 @@ test('[func] create custom fixtures/barefile.txt.hb', function(t) {
     fn(args, opts, {}, cb);
 });
 
+test('[func] create path/to/barefile.txt.hb . (dot-name-test)', function(t) {
+    var name = '.',
+        dest = path.join(__dirname, 'artifacts'),
+        opts = {directory: dest, keyval: 'mykey:dot-name-test'},
+        archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb'),
+        args = [archetype, name],
+        newfile = path.join(dest, 'barefile.txt');
+
+    t.plan(2);
+
+    function cb(err, msg) {
+        t.false(err instanceof Error, 'no error');
+        t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
+    }
+
+    fn(args, opts, {}, cb);
+});
+
 
 test('[func] barefile source with dest dir that needs mkdirp', function(t) {
     var name = 'myfile' + process.pid + '.txt',
