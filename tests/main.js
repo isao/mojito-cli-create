@@ -34,6 +34,19 @@ test('missing param', function(t) {
     fn(['zzz'], {}, {}, cb);
 });
 
+test('bad name, has slash', function(t) {
+    t.plan(4);
+
+    function cb(err) {
+        t.true(err instanceof Error, 'instance of Error');
+        t.equal(err.toString(), 'Error: Path separators not allowed in names.');
+        t.equal(err.usage, undefined);
+        t.equal(err.errno, 3);
+    }
+
+    fn(['app', 'dis/issa/no/good/name'], {}, {}, cb);
+});
+
 test('missing param, --debug', function(t) {
     var opts = {debug: true};
 

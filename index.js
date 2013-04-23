@@ -31,6 +31,10 @@ function pathify(subpath) {
     return util.findInPaths(SRCPATHS, subpath); // full path if exists, or false
 }
 
+function checkName(name) {
+    return name.indexOf(path.sep) !== -1;
+}
+
 function getDestinationDir(type, dest, name) {
     var parts = [dest || '.'];
 
@@ -95,6 +99,16 @@ function main(args, opts, meta, cb) {
         keyval = util.parseCsvObj(opts.keyval),
         dest;
 
+    function npmCb(err) {
+        if (!err && ('app' === type)) {
+            log.info('Ok, "%s" created.', name);
+            log.info('Installing mojito application "' + dest + '’s" dependencies with npm.');
+            npmi(exports.npmcmd, dest, cb);
+        } else {
+            cb(err, 'Done.');
+        }
+    }
+
     if (opts.debug) {
         log.level = 'debug';
     }
@@ -105,6 +119,9 @@ function main(args, opts, meta, cb) {
     } else if (!name) {
         cb(errorWithUsage('Missing name.', 3));
 
+    } else if (checkName(name)) {
+        cb(error('Path separators not allowed in names.', 3));
+
     } else {
         dest = getDestinationDir(type, opts.directory, name);
         keyval.name = opts.name || path.basename(dest);
@@ -113,15 +130,7 @@ function main(args, opts, meta, cb) {
         log.info('Source: %s', source);
         log.info('Destination: %s', dest);
 
-        create(source, dest, keyval, function(err) {
-            if (!err && ('app' === type)) {
-                log.info('Ok, "%s" created.', name);
-                log.info('Installing mojito application "' + dest + '’s" dependencies with npm.');
-                npmi(exports.npmcmd, dest, cb);
-            } else {
-                cb(err, 'Done.');
-            }
-        });
+        create(source, dest, keyval, npmCb);
     }
 }
 
