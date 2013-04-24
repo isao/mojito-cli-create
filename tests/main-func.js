@@ -74,7 +74,9 @@ test('[func] create custom fixtures/barefile.txt.hb', function(t) {
         var newfile = path.join(dest, name);
 
         t.false(err instanceof Error, 'no error');
-        t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
+        setTimeout(function() {
+            t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
+        }, 66);
     }
 
     fn(args, opts, {}, cb);
@@ -113,7 +115,9 @@ test('[func] create path/to/barefile.txt.hb . (dot-name-test)', function(t) {
 
     function cb(err, msg) {
         t.false(err instanceof Error, 'no error');
-        t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
+        setTimeout(function() {
+            t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
+        }, 66);
     }
 
     fn(args, opts, {}, cb);
@@ -133,7 +137,9 @@ test('[func] barefile source with dest dir that needs mkdirp', function(t) {
         var newfile = path.join(dest, name);
 
         t.false(err instanceof Error, 'no error');
-        t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
+        setTimeout(function() {
+            t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
+        }, 66);
     }
 
     fn(args, opts, {}, cb);
