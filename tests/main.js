@@ -242,3 +242,14 @@ test('getSourceDir nonesuch nonesuch foo', function(t) {
     t.equal(actual.usage.slice(0, 6), 'Usage:');
     t.end();
 });
+
+test('getSourceDir foo newfoo (where foo is ./archetypes/foo)', {skip:1}, function(t) {
+    var actual = fn.test.getSourceDir('foo', ['myfoo']);
+
+    t.ok(actual instanceof Error);
+    t.equal(actual.toString(), 'Error: nonesuch is not a valid archetype or path.');
+    t.equal(actual.errno, 5);
+    t.equal(actual.usage.slice(0, 6), 'Usage:');
+    t.end();
+});
+
