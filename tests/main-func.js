@@ -90,10 +90,12 @@ test('[func] create custom fixtures/barefile.txt.hb', function(t) {
     t.plan(2);
 
     function cb(err, msg) {
-        var newfile = path.join(dest, name);
+        var newfile = path.join(dest, name),
+            expected = fs.readFileSync(path.join(dest, name), 'utf8'),
+            actual = fs.readFileSync(newfile, 'utf8');
 
         t.false(err instanceof Error, 'no error');
-        t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
+        t.equal(actual, expected, 'contents of template file as expected');
     }
 
     fn(args, opts, {}, cb);
