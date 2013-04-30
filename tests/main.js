@@ -5,6 +5,12 @@ var path = require('path'),
 
 function noop() {}
 
+function getEnv(args) {
+    return {
+        args: args || [],
+        opts: {}
+    };
+}
 
 // error conditions, no side effects
 
@@ -18,10 +24,12 @@ test('no param', function(t) {
         t.equal(err.errno, 3);
     }
 
-    fn([], {}, {}, cb)
+    fn(getEnv(), cb)
 });
 
 test('missing param', function(t) {
+    var env = getEnv(['zzz']);
+
     t.plan(4);
 
     function cb(err) {
@@ -31,10 +39,12 @@ test('missing param', function(t) {
         t.equal(err.errno, 3);
     }
 
-    fn(['zzz'], {}, {}, cb);
+    fn(env, cb);
 });
 
 test('bad name, has slash', function(t) {
+    var env = getEnv(['app', 'dis/issa/no/good/name']);
+
     t.plan(4);
 
     function cb(err) {
@@ -44,11 +54,13 @@ test('bad name, has slash', function(t) {
         t.equal(err.errno, 3);
     }
 
-    fn(['app', 'dis/issa/no/good/name'], {}, {}, cb);
+    fn(env, cb);
 });
 
 test('missing param, --debug', function(t) {
-    var opts = {debug: true};
+    var env = getEnv(['zzz']);
+
+    env.opts = {debug: true};
 
     t.plan(4);
 
@@ -59,10 +71,12 @@ test('missing param, --debug', function(t) {
         t.equal(err.errno, 3);
     }
 
-    fn(['zzz'], opts, {}, cb);
+    fn(env, cb);
 });
 
 test('bad param', function(t) {
+    var env = getEnv(['omfg', 'bieber']);
+
     t.plan(4);
 
     function cb(err) {
@@ -72,10 +86,12 @@ test('bad param', function(t) {
         t.equal(err.errno, 5);
     }
 
-    fn(['omfg', 'bieber'], {}, {}, cb);
+    fn(env, cb);
 });
 
 test('create custom nonesuch/path', function(t) {
+    var env = getEnv(['custom', 'nonesuch/path']);
+
     t.plan(4);
 
     function cb(err) {
@@ -85,10 +101,13 @@ test('create custom nonesuch/path', function(t) {
         t.equal(err.errno, 5);
     }
 
-    fn(['custom', 'nonesuch/path'], {}, {}, cb)
+    fn(env, cb)
 });
 
 test('create custom path (missing name)', function(t) {
+    var d = path.join(__dirname, 'fixtures', 'symlinked'),
+        env = getEnv(['custom', d]);
+
     t.plan(4);
 
     function cb(err) {
@@ -98,11 +117,13 @@ test('create custom path (missing name)', function(t) {
         t.equal(err.errno, 3);
     }
 
-    var d = path.join(__dirname, 'fixtures', 'symlinked');
-    fn(['custom', d], {}, {}, cb);
+    fn(env, cb);
 });
 
 test('create path/to/fixtures (missing name)', function(t) {
+    var d = path.join(__dirname, 'fixtures', 'symlinked'),
+        env = getEnv([d]);
+
     t.plan(4);
 
     function cb(err) {
@@ -113,7 +134,7 @@ test('create path/to/fixtures (missing name)', function(t) {
     }
 
     var d = path.join(__dirname, 'fixtures', 'symlinked');
-    fn([d], {}, {}, cb)
+    fn(env, cb);
 });
 
 // fn.test.getSourceDir tests
@@ -194,7 +215,7 @@ test('getSourceDir mojit full foo', function(t) {
 
 test('type and subtype case-insensitive', function(t) {
     var actual, expected;
-    
+
     actual = fn.test.getSourceDir('APP', ['FULL', 'foo']);
     expected = 'archetypes/app/full';
     t.equal(actual.slice(-expected.length), expected);
@@ -242,14 +263,3 @@ test('getSourceDir nonesuch nonesuch foo', function(t) {
     t.equal(actual.usage.slice(0, 6), 'Usage:');
     t.end();
 });
-
-test('getSourceDir foo newfoo (where foo is ./archetypes/foo)', {skip:1}, function(t) {
-    var actual = fn.test.getSourceDir('foo', ['myfoo']);
-
-    t.ok(actual instanceof Error);
-    t.equal(actual.toString(), 'Error: nonesuch is not a valid archetype or path.');
-    t.equal(actual.errno, 5);
-    t.equal(actual.usage.slice(0, 6), 'Usage:');
-    t.end();
-});
-

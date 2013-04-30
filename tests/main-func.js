@@ -6,9 +6,7 @@ var path = require('path'),
 
     fn = require('../'),
 
-
     artifacts = path.resolve(__dirname, 'artifacts'),
-
     mockpath = path.resolve(__dirname, 'fixtures', 'mockbin', 'npm-ok'),
     oldpath = process.env.PATH;
 
@@ -16,6 +14,14 @@ var path = require('path'),
 log.pause();
 
 mkdirp(path.join(__dirname, 'artifacts'));
+
+function getEnv(args, opts) {
+    return {
+        args: args || [],
+        opts: opts || {}
+    };
+}
+
 
 // these tests create files/dirs in tests/artifacts //
 
@@ -31,7 +37,7 @@ test('[func] create mojit --directory maintest', function(t) {
         t.equal(arguments.length, 2);
     }
 
-    fn(args, opts, {}, cb);
+    fn(getEnv(args, opts), cb);
 });
 
 // hacks process path & cwd //
@@ -58,7 +64,7 @@ test('[func] create app simple FIXME', function(t) {
 
     process.chdir(artifacts);
     process.env.PATH = mockpath;
-    fn(args, opts, {}, cb);
+    fn(getEnv(args, opts), cb);
 });
 
 test('[func] create custom fixtures/barefile.txt.hb', function(t) {
@@ -79,7 +85,7 @@ test('[func] create custom fixtures/barefile.txt.hb', function(t) {
         }, 66);
     }
 
-    fn(args, opts, {}, cb);
+    fn(getEnv(args, opts), cb);
 });
 
 test('[func] create custom fixtures/barefile.txt.hb', function(t) {
@@ -100,7 +106,7 @@ test('[func] create custom fixtures/barefile.txt.hb', function(t) {
         t.equal(actual, expected, 'contents of template file as expected');
     }
 
-    fn(args, opts, {}, cb);
+    fn(getEnv(args, opts), cb);
 });
 
 test('[func] create path/to/barefile.txt.hb . (dot-name-test)', function(t) {
@@ -120,7 +126,7 @@ test('[func] create path/to/barefile.txt.hb . (dot-name-test)', function(t) {
         }, 66);
     }
 
-    fn(args, opts, {}, cb);
+    fn(getEnv(args, opts), cb);
 });
 
 
@@ -142,5 +148,5 @@ test('[func] barefile source with dest dir that needs mkdirp', function(t) {
         }, 66);
     }
 
-    fn(args, opts, {}, cb);
+    fn(getEnv(args, opts), cb);
 });
