@@ -86,15 +86,16 @@ function amMissingArgs(type, args) {
     return err && errorWithUsage(3, err);
 }
 
-function main(args, opts, meta, cb) {
-    var type = args.shift() || '',
-        source = amMissingArgs(type, args) || getSourceDir(type, args),
-        name = args.shift(),
-        keyval = util.parseCsvObj(opts.keyval),
+function main(env, cb) {
+    var type = env.args.shift() || '',
+        source = amMissingArgs(type, env.args) || getSourceDir(type, env.args),
+        name = env.args.shift(),
+        keyval = util.parseCsvObj(env.opts.keyval),
         dest;
 
-    if (opts.debug) {
-        log.level = 'debug';
+    if (env.opts.loglevel) {
+        log.level = env.opts.loglevel;
+        log.silly('logging level set to', env.opts.loglevel);
     }
 
     if (source instanceof Error) {
@@ -114,9 +115,9 @@ function main(args, opts, meta, cb) {
         name = path.basename(source);
     }
 
-    dest = getDestinationDir(type, opts.directory, name);
-    keyval.name = opts.name || path.basename(dest);
-    keyval.port = opts.port || 8666;
+    dest = getDestinationDir(type, env.opts.directory, name);
+    keyval.name = env.opts.name || path.basename(dest);
+    keyval.port = env.opts.port || 8666;
 
     log.info('Source: %s', source);
     log.info('Destination: %s', dest);
