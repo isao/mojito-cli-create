@@ -25,11 +25,12 @@
   },
   "bugs": "https://github.com/yahoo/mojito-create/issues",
   "contributors": [
-    "Chris Klaiber <cklaiber@yahoo-inc.com>",
+    "Chris Klaiber",
     "Drew Folta <folta@yahoo-inc.com>",
     "Martin Cooper <mcooper@yahoo-inc.com>",
-    "Matt Taylor <mtaylor@yahoo-inc.com>",
-    "Ric Allinson <allinson@yahoo-inc.com>"
+    "Matt Taylor",
+    "Ric Allinson <allinson@yahoo-inc.com>",
+    "Scott Shattuck"
   ],
   "author": "Isao Yagi <isao@yahoo-inc.com>",
   "license": "BSD",
