@@ -60,7 +60,7 @@ test('bad name, has slash', function(t) {
 test('missing param, --debug', function(t) {
     var env = getEnv(['zzz']);
 
-    env.opts = {debug: true};
+    env.opts = {loglevel: 'debug'}; //nopt alias
 
     t.plan(4);
 
