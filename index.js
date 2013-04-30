@@ -148,7 +148,7 @@ exports.usage = [
     'Example: mojito create mojit Bar',
     '  (creates directory "Bar" containing new Mojit named "Bar")',
     '',
-    'OPTIONS: ',
+    'Options: ',
     '  --directory <path> Optional destination directory',
     '  -d <path>          Short for --directory',
     '  --port <number>    Specifies default port for your Mojito app to run on.',
@@ -164,6 +164,6 @@ exports.options = [
     {shortName: 'p', hasValue: true, longName: 'port'}
 ];
 
-exports.test = {getSourceDir: getSourceDir};
+exports.getSourceDir = getSourceDir;
 
 module.exports = exports;
