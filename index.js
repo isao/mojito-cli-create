@@ -149,17 +149,19 @@ exports.usage = [
     '  (creates directory "Bar" containing new Mojit named "Bar")',
     '',
     'OPTIONS: ',
-    '  --port [number]  Specifies default port for your Mojito app to run on.',
-    '  -p [number]      Short for --port',
-    '  -keyval [string] key value pairs to pass to a custom archetype template',
-    '                   a key/value is separated by colons, key/value pairs by',
-    '                   commas: "key1:val1,key2:val2',
-    '  -k [string]      Short for --keyval'].join('\n');
+    '  --directory <path> Optional destination directory',
+    '  -d <path>          Short for --directory',
+    '  --port <number>    Specifies default port for your Mojito app to run on.',
+    '  -p [number]        Short for --port.',
+    '  --keyval <string>  key value pairs to pass to a custom archetype template',
+    '                     a key/value is separated by colons, key/value pairs by',
+    '                     commas: "key1:val1,key2:val2',
+    '  -k <string>        Short for --keyval'].join('\n');
 
 exports.options = [
-    {shortName: 'd', hasValue: true,  longName: 'directory'},
-    {shortName: 'k', hasValue: true,  longName: 'keyval'},
-    {shortName: 'p', hasValue: true,  longName: 'port'}
+    {shortName: 'd', hasValue: true, longName: 'directory'},
+    {shortName: 'k', hasValue: true, longName: 'keyval'},
+    {shortName: 'p', hasValue: true, longName: 'port'}
 ];
 
 exports.test = {getSourceDir: getSourceDir};
