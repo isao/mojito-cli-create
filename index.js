@@ -159,7 +159,7 @@ exports.usage = [
     '  -k <string>        Short for --keyval'].join('\n');
 
 exports.options = [
-    {shortName: 'd', hasValue: true, longName: 'directory'},
+    {shortName: 'd', hasValue: true, longName: 'directory'}, // redundant
     {shortName: 'k', hasValue: true, longName: 'keyval'},
     {shortName: 'p', hasValue: true, longName: 'port'}
 ];
