@@ -66,7 +66,7 @@ function getSourceDir(type, args) {
     default:
         // 3. mojito create [options] <path/to/archetype> <name>
         //    (this *should* be the only supported syntax)
-        source = pathify(type);
+        source = util.exists(type) && path.resolve(type);
         err = type + ' is not a valid archetype or path.';
     }
 
@@ -148,7 +148,7 @@ exports.usage = [
     'Example: mojito create mojit Bar',
     '  (creates directory "Bar" containing new Mojit named "Bar")',
     '',
-    'OPTIONS: ',
+    'Options: ',
     '  --directory <path> Optional destination directory',
     '  -d <path>          Short for --directory',
     '  --port <number>    Specifies default port for your Mojito app to run on.',
@@ -159,11 +159,11 @@ exports.usage = [
     '  -k <string>        Short for --keyval'].join('\n');
 
 exports.options = [
-    {shortName: 'd', hasValue: true, longName: 'directory'},
+    {shortName: 'd', hasValue: true, longName: 'directory'}, // redundant
     {shortName: 'k', hasValue: true, longName: 'keyval'},
     {shortName: 'p', hasValue: true, longName: 'port'}
 ];
 
-exports.test = {getSourceDir: getSourceDir};
+exports.getSourceDir = getSourceDir;
 
 module.exports = exports;

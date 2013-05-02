@@ -18,8 +18,8 @@ test('[func] create from fixtures/symlinked', function(t) {
 
     t.plan(4);
     function cb(err, msg) {
-        t.false(err, 'null error');
-        t.equal(msg, expected_count, 'fs node count');
+        t.false(err, 'no error');
+        t.false(msg, 'no msg');
     }
 
     scan = fn(from, to, data, cb);
@@ -38,10 +38,11 @@ test('create nonesuch', function(t) {
         to = resolve(__dirname, 'artifacts'),
         scan;
 
-    t.plan(6);
+    t.plan(8);
 
     function cb(err, msg) {
-        t.true(err, 'has error');
+        t.equal(err.toString(), 'Error: 1 error');
+        t.same(err.messages, ["ENOENT, stat 'oh hey, no. sorry.'"]);
     }
 
     scan = fn(from, to, {}, cb);
@@ -49,6 +50,7 @@ test('create nonesuch', function(t) {
         t.equal(pathname, from);
         t.equal(err.code, 'ENOENT');
         t.equal(err.errno, 34);
+        t.same(err.message, "ENOENT, stat 'oh hey, no. sorry.'");
         t.equal(pathname, err.path);
         t.false(stat);
     });
