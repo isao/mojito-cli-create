@@ -1,6 +1,6 @@
 {
   "name": "mojito-create",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Subcommand for mojito-cli to create mojito scaffolding/boilerplate.",
   "dependencies": {
     "mkdirp": "~0.3.5",
