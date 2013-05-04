@@ -112,8 +112,8 @@ function main(env, cb) {
         return;
     }
 
-    if (('.' === name) && util.exists(source).isFile()) { // 2nd stat, fixme
-        name = path.basename(source);
+    if (('.' === name)) {
+        name = path.basename(source).replace(create.TEMPLATE_RE, '');
     }
 
     dest = getDestinationDir(type, env.opts.directory, name);
