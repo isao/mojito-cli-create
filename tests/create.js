@@ -28,7 +28,7 @@ test('[func] create from fixtures/symlinked', function(t) {
         t.equal(pathname.slice(-expected.length), expected, '.placeholder ignored');
     });
 
-    scan.on('done', function(count) {
+    scan.on('done', function(err, count) {
         t.equal(count, expected_count, 'fs node count');
     });
 });

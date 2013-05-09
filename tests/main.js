@@ -51,7 +51,7 @@ test('bad name, has slash', function(t) {
 
     function cb(err) {
         t.true(err instanceof Error, 'instance of Error');
-        t.equal(err.toString(), 'Error: Path separators not allowed in names.');
+        t.equal(err.toString().slice(0, 43), 'Error: Path separators not allowed in names');
         t.equal(err.usage, undefined);
         t.equal(err.errno, 3);
     }
