@@ -103,16 +103,17 @@ function main(env, cb) {
         return;
 
     } else if (!name) {
+        // todo? might be nice use '.' (source basename) if type != app or mojit
         cb(errorWithUsage(3, 'Missing name.'));
         return;
 
     } else if (checkName(name)) {
-        cb(util.error(3, 'Path separators not allowed in names.'));
+        cb(util.error(3, 'Path separators not allowed in names. You might want to use the -d option.'));
         return;
     }
 
-    if (('.' === name) && util.exists(source).isFile()) { // 2nd stat, fixme
-        name = path.basename(source);
+    if (('.' === name)) {
+        name = path.basename(source).replace(create.TEMPLATE_RE, '');
     }
 
     dest = getDestinationDir(type, env.opts.directory, name);
