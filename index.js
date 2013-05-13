@@ -8,7 +8,6 @@
 var path = require('path'),
     log = require('./lib/log'),
     util = require('./lib/utils'),
-    npmi = require('./lib/npmi'),
     create = require('./lib/create'),
 
     // todo: make user configurable
@@ -136,9 +135,9 @@ function main(env, cb) {
     create(source, dest, keyval, npmCb);
 }
 
-exports = main;
+module.exports = main;
 
-exports.usage = [
+module.exports.usage = [
     'Usage: mojito create [options] <app|mojit> [full|simple|default] <name>',
     'Usage: mojito create [options] custom <path/to/archetype> <name>',
     'Usage: mojito create [options] <path/to/archetype> <name>',
@@ -159,12 +158,11 @@ exports.usage = [
     '                     commas: "key1:val1,key2:val2',
     '  -k <string>        Short for --keyval'].join('\n');
 
-exports.options = [
-    {shortName: 'd', hasValue: true, longName: 'directory'}, // redundant
+module.exports.options = [
+    {shortName: 'd', hasValue: true, longName: 'directory'},
     {shortName: 'k', hasValue: true, longName: 'keyval'},
     {shortName: 'p', hasValue: true, longName: 'port'}
 ];
 
-exports.getSourceDir = getSourceDir;
-
-module.exports = exports;
+module.exports.getSourceDir = getSourceDir;
+module.exports.npmi = require('./lib/npmi');
