@@ -94,13 +94,14 @@ test('[func] create custom fixtures/barefile.txt.hb', function(t) {
     fn(env, cb);
 });
 
-test('[func] create fixtures/barefile.txt.hb foo/.', function(t) {
+test('[func] create fixtures/barefile.txt.hb foo/. (dotname test)', function(t) {
     var archetype = path.resolve(fixtures, 'barefile.txt.hb'),
-        name = path.join(artifacts, 'foo') + path.sep + '.',
+        foo = 'foo' + process.pid,
+        name = path.join(artifacts, foo) + path.sep + '.',
         env = getEnv([archetype, name], {});
 
     function cb(err, msg) {
-        var newdir = path.join(artifacts, 'foo'),
+        var newdir = path.join(artifacts, foo),
             newfile = path.join(newdir, 'barefile.txt');
 
         t.false(err instanceof Error, 'no error');
