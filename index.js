@@ -24,19 +24,14 @@ function pathify(subpath) {
     return util.findInPaths(SRCPATHS, subpath); // full path if exists, or false
 }
 
-function checkName(name) {
-    return name.indexOf(path.sep) !== -1;
-}
-
 function getDestinationDir(type, destopt, name) {
-    var parts = [destopt || '.'];
+    var parts = [destopt];
 
     if ('mojit' === type.toLowerCase()) {
         parts.push('mojits'); // BC - type "mojit" goes inside mojits dir
     }
 
-    parts.push(name);
-    return path.resolve.apply(null, parts);
+    return path.resolve.apply(null, parts.concat(name));
 }
 
 function subtypePath(type, args) {
@@ -90,7 +85,7 @@ function main(env, cb) {
         source = amMissingArgs(type, env.args) || getSourceDir(type, env.args),
         name = env.args.shift(),
         keyval = util.parseCsvObj(env.opts.keyval),
-        dest;
+        dest = env.opts.directory || '.';
 
     if (env.opts.loglevel) {
         log.level = env.opts.loglevel;
@@ -100,33 +95,38 @@ function main(env, cb) {
     if (source instanceof Error) {
         cb(source);
         return;
+    }
 
-    } else if (!name) {
-        // todo? might be nice use '.' (source basename) if type != app or mojit
+    if (!name) {
         cb(errorWithUsage(3, 'Missing name.'));
-        return;
-
-    } else if (checkName(name)) {
-        cb(util.error(3, 'Path separators not allowed in names. You might want to use the -d option.'));
         return;
     }
 
-    if (('.' === name)) {
+    if (name.indexOf(path.sep) !== -1) {
+        // assume a name like foo/bar/baz is like --dir foo/bar & name baz
+        // if --dir is already specified, use it too
+        dest = path.resolve(dest, path.dirname(name));
+        name = path.basename(name);
+    }
+
+    // enable shortcut for destination file/dir name
+    if ('.' === name) {
         name = path.basename(source).replace(create.TEMPLATE_RE, '');
     }
 
-    dest = getDestinationDir(type, env.opts.directory, name);
-    keyval.name = env.opts.name || path.basename(dest);
+    dest = getDestinationDir(type, dest, name);
+
+    keyval.name = keyval.name || name;
     keyval.port = env.opts.port || 8666;
 
-    log.info('Source: %s', source);
-    log.info('Destination: %s', dest);
+    log.info('Name:', keyval.name);
+    log.info('Source:', source);
+    log.info('Destination:', dest);
 
     function npmCb(err) {
         if (!err && ('app' === type)) {
-            log.info('Ok, "%s" created.', name);
             log.info('Installing mojito application "' + dest + '’s" dependencies with npm.');
-            npmi(dest, cb);
+            module.exports.npmi(dest, cb);
         } else {
             cb(err, 'Done.');
         }
