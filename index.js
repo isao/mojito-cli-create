@@ -6,6 +6,8 @@
 'use strict';
 
 var path = require('path'),
+    mkdirp = require('mkdirp').sync,
+
     log = require('./lib/log'),
     util = require('./lib/utils'),
     create = require('./lib/create'),
@@ -22,6 +24,26 @@ function errorWithUsage(code, msg) {
 
 function pathify(subpath) {
     return util.findInPaths(SRCPATHS, subpath); // full path if exists, or false
+}
+
+function makeDestinationDir(from, to) {
+    var stat = util.exists(from),
+        is_file = stat && stat.isFile(),
+        dest = is_file ? path.dirname(to) : to,
+        dstat = util.exists(dest),
+        is_dir = dstat && dstat.isDirectory(),
+        error = null;
+
+    if (!dstat || !is_dir) {
+        try {
+            log.debug('mkdirp ', dest);
+            mkdirp(dest);
+        } catch(err) {
+            error = util.error(9, 'Destination directory is invalid!');
+        }
+    }
+
+    return error;
 }
 
 function getDestinationDir(type, destopt, name) {
@@ -80,6 +102,21 @@ function amMissingArgs(type, args) {
     return err && errorWithUsage(3, err);
 }
 
+function exec(source, dest, keyval, cb) {
+    var dircheck = makeDestinationDir(source, dest);
+
+    log.info('Name:', keyval.name);
+    log.info('Source:', source);
+    log.info('Destination:', dest);
+
+    if (dircheck) {
+        cb(dircheck);
+        return;
+    }
+
+    create(source, dest, keyval, cb);
+}
+
 function main(env, cb) {
     var type = env.args.shift() || '',
         source = amMissingArgs(type, env.args) || getSourceDir(type, env.args),
@@ -115,13 +152,8 @@ function main(env, cb) {
     }
 
     dest = getDestinationDir(type, dest, name);
-
     keyval.name = keyval.name || name;
     keyval.port = env.opts.port || 8666;
-
-    log.info('Name:', keyval.name);
-    log.info('Source:', source);
-    log.info('Destination:', dest);
 
     function npmCb(err) {
         if (!err && ('app' === type)) {
@@ -132,7 +164,7 @@ function main(env, cb) {
         }
     }
 
-    create(source, dest, keyval, npmCb);
+    exec(source, dest, keyval, 'app' === type ? npmCb : cb);
 }
 
 module.exports = main;
