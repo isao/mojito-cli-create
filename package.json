@@ -1,5 +1,5 @@
 {
-  "name": "mojito-create",
+  "name": "mojito-cli-create",
   "version": "0.0.3",
   "description": "Subcommand for mojito-cli to create mojito scaffolding/boilerplate.",
   "dependencies": {
@@ -20,9 +20,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/yahoo/mojito-create.git"
+    "url": "git://github.com/yahoo/mojito-cli-create.git"
   },
-  "bugs": "https://github.com/yahoo/mojito-create/issues",
+  "bugs": "https://github.com/yahoo/mojito-cli-create/issues",
   "contributors": [
     "Chris Klaiber",
     "Drew Folta <folta@yahoo-inc.com>",
