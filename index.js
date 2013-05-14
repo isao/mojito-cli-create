@@ -39,7 +39,7 @@ function makeDestinationDir(from, to) {
             log.debug('mkdirp ', dest);
             mkdirp(dest);
         } catch(err) {
-            error = util.error(9, 'Destination directory is invalid!');
+            error = util.error(9, 'Destination directory is invalid.');
         }
     }
 
@@ -156,12 +156,8 @@ function main(env, cb) {
     keyval.port = env.opts.port || 8666;
 
     function npmCb(err) {
-        if (!err && ('app' === type)) {
-            log.info('Installing mojito application "' + dest + '’s" dependencies with npm.');
-            module.exports.npmi(dest, cb);
-        } else {
-            cb(err, 'Done.');
-        }
+        log.info('Installing mojito application "' + dest + '’s" dependencies with npm.');
+        module.exports.npmi(err, dest, cb);
     }
 
     exec(source, dest, keyval, 'app' === type ? npmCb : cb);

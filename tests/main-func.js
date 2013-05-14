@@ -55,7 +55,7 @@ test('[func] create app simple simpleapp', function(t) {
         name = 'simpleapp' + process.pid,
         env = getEnv(['app', 'simple', name], opts);
 
-    function npmi(dest, cb) {
+    function npmi(err, dest, cb) {
         var expected = path.join(artifacts, name);
         t.equal(dest, expected);
         cb(null, 'ok');
@@ -110,6 +110,21 @@ test('[func] create fixtures/barefile.txt.hb foo/. (dotname test)', function(t) 
     }
 
     t.plan(3);
+    fn(env, cb);
+});
+
+test('[func] invalid dest dir', function(t) {
+    var archetype = path.resolve(fixtures, 'barefile.txt.hb'),
+        name = path.join(__filename, 'foo'),
+        env = getEnv([archetype, name], {});
+
+    function cb(err, msg) {
+        t.ok(err instanceof Error, 'error was expected');
+        t.equal(err.errnum, 9);
+        t.equal(err.message, 'Destination directory is invalid.');
+    }
+
+    t.plan(2);
     fn(env, cb);
 });
 
