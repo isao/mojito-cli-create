@@ -9,6 +9,17 @@ var test = require('tap').test,
 
 log.pause();
 
+
+test('err is 1st param', function(t) {
+
+    function cb(err) {
+        t.same(err, 'oh noes.');
+    }
+
+    t.plan(1)
+    fn('oh noes.', null, cb);
+});
+
 test('no *npm', function(t) {
     t.plan(4);
     process.env.PATH = mockpath;
@@ -21,7 +32,7 @@ test('no *npm', function(t) {
         process.env.PATH = oldpath;
     }
 
-    fn('.', cb);
+    fn(null, '.', cb);
 });
 
 test('npm-fail', function(t) {
@@ -36,7 +47,7 @@ test('npm-fail', function(t) {
         process.env.PATH = oldpath;
     }
 
-    fn('.', cb);
+    fn(null, '.', cb);
 });
 
 test('npm-ok', function(t) {
@@ -49,7 +60,7 @@ test('npm-ok', function(t) {
         process.env.PATH = oldpath;
     }
 
-    fn('.', cb);
+    fn(null, '.', cb);
 });
 
 test('ynpm-ok', function(t) {
@@ -62,5 +73,5 @@ test('ynpm-ok', function(t) {
         process.env.PATH = oldpath;
     }
 
-    fn('.', cb);
+    fn(null, '.', cb);
 });

@@ -1,19 +1,15 @@
 var path = require('path'),
     fs = require('fs'),
-    mkdirp = require('mkdirp').sync,
-    log = require('../lib/log'),
     test = require('tap').test,
 
+    log = require('../lib/log'),
     fn = require('../'),
 
-    artifacts = path.resolve(__dirname, 'artifacts'),
-    mockpath = path.resolve(__dirname, 'fixtures', 'mockbin', 'npm-ok'),
-    oldpath = process.env.PATH;
+    artifacts = path.join(__dirname, 'artifacts'),
+    fixtures = path.resolve(__dirname, 'fixtures');
 
 
-log.pause();
-
-mkdirp(path.join(__dirname, 'artifacts'));
+//log.pause();
 
 function getEnv(args, opts) {
     return {
@@ -22,57 +18,69 @@ function getEnv(args, opts) {
     };
 }
 
+// these tests create files/dirs in tests/artifacts
 
-// these tests create files/dirs in tests/artifacts //
-
-test('[func] create mojit --directory maintest', function(t) {
-    var opts = {directory: path.join(__dirname, 'artifacts', 'maintest' + process.pid)},
+test('[func] create --directory functest', function(t) {
+    var opts = {directory: path.join(artifacts, 'funcmojit' + process.pid)},
         args = ['mojit', 'simple', 'simplemojit'];
 
-    t.plan(3);
 
     function cb(err, msg) {
-        t.false(err instanceof Error);
-        t.equal(msg, 'Done.');
-        t.equal(arguments.length, 2);
+        var expected = path.join(opts.directory, 'mojits', 'simplemojit');
+        t.ok(fs.existsSync(expected), expected);
+
+        expected = path.join(expected, 'controller.server.js');
+        t.ok(fs.existsSync(expected, expected));
     }
 
+    t.plan(2);
     fn(getEnv(args, opts), cb);
 });
 
-// hacks process path & cwd //
-// creates tests/artifacts/simpleapp + pid
-test('[func] create app simple FIXME', function(t) {
-    var opts = {},
-        name = 'simpleapp' + process.pid,
-        args = ['app', 'simple', name],
-        oldcwd = process.cwd();
+test('paths in names are treated like a --dir option', function(t) {
+    var name = path.join(artifacts, 'pathname' + process.pid, 'ok'),
+        args = ['mojit', 'simple', name];
 
-    t.plan(5);
+    function cb(err) {
+        var expected = path.join(artifacts, 'pathname' + process.pid, 'mojits', 'ok');
+        t.ok(fs.existsSync(expected), expected);
+    }
+
+    t.plan(1);
+    fn(getEnv(args), cb);
+});
+
+test('[func] create app simple simpleapp', function(t) {
+    var opts = {directory: artifacts},
+        name = 'simpleapp' + process.pid,
+        env = getEnv(['app', 'simple', name], opts);
+
+    function npmi(err, dest, cb) {
+        var expected = path.join(artifacts, name);
+        t.equal(dest, expected);
+        cb(null, 'ok');
+    }
 
     function cb(err, msg) {
         var dest = path.join(artifacts, name);
-
-        t.equal(artifacts, process.cwd());
         t.false(err instanceof Error, 'no error');
-        t.same(msg, 'Done.');
-        t.ok(fs.statSync(dest).isDirectory());
-        t.ok(fs.statSync(path.join(dest, 'server.js')).isFile());
-        process.chdir(oldcwd);
-        process.env.PATH = oldpath;
+        t.ok(fs.existsSync(dest));
+        t.ok(fs.existsSync(path.join(dest, 'server.js')));
     }
 
-    process.chdir(artifacts);
-    process.env.PATH = mockpath;
-    fn(getEnv(args, opts), cb);
+    t.plan(4);
+
+    fn.npmi = npmi;
+    fn(env, cb);
 });
 
 test('[func] create custom fixtures/barefile.txt.hb', function(t) {
-    var name = 'myfile-missing-key' + process.pid + '.txt',
-        dest = path.join(__dirname, 'artifacts'),
+    var dest = path.join(artifacts, 'barefile' + process.pid),
         opts = {directory: dest},
-        archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb'),
-        args = ['custom', archetype, name];
+        archetype = path.resolve(fixtures, 'barefile.txt.hb'),
+        name = 'myfile' + process.pid + '.txt',
+        args = ['custom', archetype, name],
+        env = getEnv(args, opts);
 
     t.plan(2);
 
@@ -80,73 +88,43 @@ test('[func] create custom fixtures/barefile.txt.hb', function(t) {
         var newfile = path.join(dest, name);
 
         t.false(err instanceof Error, 'no error');
-        setTimeout(function() {
-            t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
-        }, 66);
+        t.ok(fs.statSync(newfile).isFile());
     }
 
-    fn(getEnv(args, opts), cb);
+    fn(env, cb);
 });
 
-test('[func] create custom fixtures/barefile.txt.hb', function(t) {
-    var name = 'myfile-mykey' + process.pid + '.txt',
-        dest = path.join(__dirname, 'artifacts'),
-        opts = {directory: dest, keyval: 'mykey:myval'},
-        archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb'),
-        args = ['custom', archetype, name];
-
-    t.plan(2);
+test('[func] create fixtures/barefile.txt.hb foo/. (dotname test)', function(t) {
+    var archetype = path.resolve(fixtures, 'barefile.txt.hb'),
+        foo = 'foo' + process.pid,
+        name = path.join(artifacts, foo) + path.sep + '.',
+        env = getEnv([archetype, name], {});
 
     function cb(err, msg) {
-        var newfile = path.join(dest, name),
-            expected = fs.readFileSync(path.join(dest, name), 'utf8'),
-            actual = fs.readFileSync(newfile, 'utf8');
+        var newdir = path.join(artifacts, foo),
+            newfile = path.join(newdir, 'barefile.txt');
 
         t.false(err instanceof Error, 'no error');
-        t.equal(actual, expected, 'contents of template file as expected');
+        t.ok(fs.statSync(newdir).isDirectory());
+        t.ok(fs.statSync(newfile).isFile());
     }
 
-    fn(getEnv(args, opts), cb);
+    t.plan(3);
+    fn(env, cb);
 });
 
-test('[func] create path/to/barefile.txt.hb . (dot-name-test)', function(t) {
-    var name = '.',
-        dest = path.join(__dirname, 'artifacts'),
-        opts = {directory: dest, keyval: 'mykey:dot-name-test'},
-        archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb'),
-        args = [archetype, name],
-        newfile = path.join(dest, 'barefile.txt');
-
-    t.plan(2);
+test('[func] invalid dest dir', function(t) {
+    var archetype = path.resolve(fixtures, 'barefile.txt.hb'),
+        name = path.join(__filename, 'foo'),
+        env = getEnv([archetype, name], {});
 
     function cb(err, msg) {
-        t.false(err instanceof Error, 'no error');
-        setTimeout(function() {
-            t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
-        }, 66);
+        t.ok(err instanceof Error, 'error was expected');
+        t.equal(err.errnum, 9);
+        t.equal(err.message, 'Destination directory is invalid.');
     }
-
-    fn(getEnv(args, opts), cb);
-});
-
-
-test('[func] barefile source with dest dir that needs mkdirp', function(t) {
-    var name = 'myfile' + process.pid + '.txt',
-        dest = path.join(__dirname, 'artifacts', 'newdest' + process.pid),
-        opts = {directory: dest},
-        archetype = path.resolve(__dirname, 'fixtures', 'barefile.txt.hb'),
-        args = ['custom', archetype, name];
 
     t.plan(2);
-
-    function cb(err, msg) {
-        var newfile = path.join(dest, name);
-
-        t.false(err instanceof Error, 'no error');
-        setTimeout(function() {
-            t.ok(fs.statSync(newfile).isFile(), 'created ' + name);
-        }, 66);
-    }
-
-    fn(getEnv(args, opts), cb);
+    fn(env, cb);
 });
+

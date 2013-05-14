@@ -44,21 +44,6 @@ test('missing param', function(t) {
     fn(env, cb);
 });
 
-test('bad name, has slash', function(t) {
-    var env = getEnv(['app', 'dis/issa/no/good/name']);
-
-    t.plan(4);
-
-    function cb(err) {
-        t.true(err instanceof Error, 'instance of Error');
-        t.equal(err.toString().slice(0, 43), 'Error: Path separators not allowed in names');
-        t.equal(err.usage, undefined);
-        t.equal(err.errno, 3);
-    }
-
-    fn(env, cb);
-});
-
 test('missing param, --debug', function(t) {
     var env = getEnv(['zzz']);
 

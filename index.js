@@ -6,9 +6,10 @@
 'use strict';
 
 var path = require('path'),
+    mkdirp = require('mkdirp').sync,
+
     log = require('./lib/log'),
     util = require('./lib/utils'),
-    npmi = require('./lib/npmi'),
     create = require('./lib/create'),
 
     // todo: make user configurable
@@ -25,19 +26,34 @@ function pathify(subpath) {
     return util.findInPaths(SRCPATHS, subpath); // full path if exists, or false
 }
 
-function checkName(name) {
-    return name.indexOf(path.sep) !== -1;
+function makeDestinationDir(from, to) {
+    var stat = util.exists(from),
+        is_file = stat && stat.isFile(),
+        dest = is_file ? path.dirname(to) : to,
+        dstat = util.exists(dest),
+        is_dir = dstat && dstat.isDirectory(),
+        error = null;
+
+    if (!dstat || !is_dir) {
+        try {
+            log.debug('mkdirp ', dest);
+            mkdirp(dest);
+        } catch(err) {
+            error = util.error(9, 'Destination directory is invalid.');
+        }
+    }
+
+    return error;
 }
 
 function getDestinationDir(type, destopt, name) {
-    var parts = [destopt || '.'];
+    var parts = [destopt];
 
     if ('mojit' === type.toLowerCase()) {
         parts.push('mojits'); // BC - type "mojit" goes inside mojits dir
     }
 
-    parts.push(name);
-    return path.resolve.apply(null, parts);
+    return path.resolve.apply(null, parts.concat(name));
 }
 
 function subtypePath(type, args) {
@@ -86,12 +102,27 @@ function amMissingArgs(type, args) {
     return err && errorWithUsage(3, err);
 }
 
+function exec(source, dest, keyval, cb) {
+    var dircheck = makeDestinationDir(source, dest);
+
+    log.info('Name:', keyval.name);
+    log.info('Source:', source);
+    log.info('Destination:', dest);
+
+    if (dircheck) {
+        cb(dircheck);
+        return;
+    }
+
+    create(source, dest, keyval, cb);
+}
+
 function main(env, cb) {
     var type = env.args.shift() || '',
         source = amMissingArgs(type, env.args) || getSourceDir(type, env.args),
         name = env.args.shift(),
         keyval = util.parseCsvObj(env.opts.keyval),
-        dest;
+        dest = env.opts.directory || '.';
 
     if (env.opts.loglevel) {
         log.level = env.opts.loglevel;
@@ -101,44 +132,40 @@ function main(env, cb) {
     if (source instanceof Error) {
         cb(source);
         return;
+    }
 
-    } else if (!name) {
-        // todo? might be nice use '.' (source basename) if type != app or mojit
+    if (!name) {
         cb(errorWithUsage(3, 'Missing name.'));
-        return;
-
-    } else if (checkName(name)) {
-        cb(util.error(3, 'Path separators not allowed in names. You might want to use the -d option.'));
         return;
     }
 
-    if (('.' === name)) {
+    if (name.indexOf(path.sep) !== -1) {
+        // assume a name like foo/bar/baz is like --dir foo/bar & name baz
+        // if --dir is already specified, use it too
+        dest = path.resolve(dest, path.dirname(name));
+        name = path.basename(name);
+    }
+
+    // enable shortcut for destination file/dir name
+    if ('.' === name) {
         name = path.basename(source).replace(create.TEMPLATE_RE, '');
     }
 
-    dest = getDestinationDir(type, env.opts.directory, name);
-    keyval.name = env.opts.name || path.basename(dest);
+    dest = getDestinationDir(type, dest, name);
+    keyval.name = keyval.name || name;
     keyval.port = env.opts.port || 8666;
 
-    log.info('Source: %s', source);
-    log.info('Destination: %s', dest);
-
     function npmCb(err) {
-        if (!err && ('app' === type)) {
-            log.info('Ok, "%s" created.', name);
-            log.info('Installing mojito application "' + dest + '’s" dependencies with npm.');
-            npmi(dest, cb);
-        } else {
-            cb(err, 'Done.');
-        }
+        log.info('Installing mojito application "' + dest + '’s" dependencies with npm.');
+        module.exports.npmi(err, dest, cb);
     }
 
-    create(source, dest, keyval, npmCb);
+    exec(source, dest, keyval, 'app' === type ? npmCb : cb);
 }
 
-exports = main;
+module.exports = main;
 
-exports.usage = [
+module.exports.usage = [
     'Usage: mojito create [options] <app|mojit> [full|simple|default] <name>',
     'Usage: mojito create [options] custom <path/to/archetype> <name>',
     'Usage: mojito create [options] <path/to/archetype> <name>',
@@ -159,12 +186,11 @@ exports.usage = [
     '                     commas: "key1:val1,key2:val2',
     '  -k <string>        Short for --keyval'].join('\n');
 
-exports.options = [
-    {shortName: 'd', hasValue: true, longName: 'directory'}, // redundant
+module.exports.options = [
+    {shortName: 'd', hasValue: true, longName: 'directory'},
     {shortName: 'k', hasValue: true, longName: 'keyval'},
     {shortName: 'p', hasValue: true, longName: 'port'}
 ];
 
-exports.getSourceDir = getSourceDir;
-
-module.exports = exports;
+module.exports.getSourceDir = getSourceDir;
+module.exports.npmi = require('./lib/npmi');
