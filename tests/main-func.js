@@ -9,7 +9,7 @@ var path = require('path'),
     fixtures = path.resolve(__dirname, 'fixtures');
 
 
-//log.pause();
+log.pause();
 
 function getEnv(args, opts) {
     return {
@@ -120,11 +120,11 @@ test('[func] invalid dest dir', function(t) {
 
     function cb(err, msg) {
         t.ok(err instanceof Error, 'error was expected');
-        t.equal(err.errnum, 9);
+        t.equal(err.errno, 9);
         t.equal(err.message, 'Destination directory is invalid.');
     }
 
-    t.plan(2);
+    t.plan(3);
     fn(env, cb);
 });
 
