@@ -10,13 +10,13 @@ Archetypes are used to create skeletons for the different types of artifacts in 
 
 To create a skeleton for a Mojito application:
 
-    $ mojito create app [<archetype-name>] <app-name>
+    mojito create app [<archetype-name>] <app-name>
 
 This will create an empty application (i.e., one with no mojits) with the name provided. The application is created in a directory named `<app-name>` within the current directory. If no archetype name is provided, the default archetype is used.
 
 From the application directory, use the following command to create a skeleton for a mojit:
 
-    $ mojito create mojit [<archetype-name>] <mojit-name>
+    mojito create mojit [<archetype-name>] <mojit-name>
 
 This will create an empty mojit with the name provided. The command assumes it is being executed within an application directory. Thus, the mojit is created in a directory named `<mojit-name>` within a mojits subdirectory of the application directory. For example, the mojit MyMojit would be created in mojits/MyMojit.
 
@@ -36,18 +36,24 @@ Custom Archetypes
 
 You can copy the [built-in](https://github.com/yahoo/mojito-cli-create/tree/master/archetypes) archetypes and modify them to suit your work-flow, or create your own. Then you can specify the path to specific archetype, like so:
 
-    $ mojito create custom <path/to/archtype> <name>
+    mojito create custom <path/to/archtype> <path/to/name>
 
-If a file in the archetype source ends with ".hb" then the contents of the file will have key/value replacement done for the following:
+Or:
 
-* `{{port}}` -> default port number 8666 or the value passed by option `--port`
-* `{{name}}` -> the name passed as the last command line argument that is not a flag or option, like `--port`
-* key/value pairs in a string following the `--keyval`, or `-k` option. For example:
-  * let's say you have an archetype directory at `../menus` containing one file `today.html.hb`.
-  * the text file `today.html.hb` contains placeholders `{{dish}}` and `{{side}}`
-  * you do this: `mojito create custom ../menus TodaysMenu -k dish:tilapia,side:macaroni`
-    * a new directory `TodaysMenu` is created containing the file `today.html` (the ".hb" extension is removed).
-    * in the file `today.html`, all occurrences of the strings `{{dish}}` and `{{side}}` are replaced with `tilapia` and `macaroni`.
+    mojito create <path/to/archtype> <path/to/name>
+
+If a file in the archetype source ends with ".hb" then:
+
+1. the file name created will get the ".hb" removed
+1. the contents of the file will have key/value replacement done for the following:
+  * `{{port}}` -> default port number 8666 or the value passed by option `--port`
+  * `{{name}}` -> the name passed as the last command line argument that is not a flag or option, like `--port`
+  * key/value pairs in a string following the `--keyval`, or `-k` option. For example:
+    * let's say you have an archetype directory at `../menus` containing one file `today.html.hb`.
+    * the text file `today.html.hb` contains placeholders `{{dish}}` and `{{side}}`
+    * you do this: `mojito create custom ../menus TodaysMenu -k dish:tilapia,side:macaroni`
+      * a new directory `TodaysMenu` is created containing the file `today.html` (the ".hb" extension is removed).
+      * in the file `today.html`, all occurrences of the strings `{{dish}}` and `{{side}}` are replaced with `tilapia` and `macaroni`.
 
 Discussion/Forums
 -----------------
