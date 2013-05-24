@@ -50,12 +50,14 @@ for the following:
 
 * `{{port}}` -> default port number 8666 or the value passed by option `--port`
 * `{{name}}` -> the name passed as the last command line argument that is not a flag or option, like `--port`
-* key/value pairs in a string following the `--keyval`, or `-k` option. For example:
-  * let's say you have an archetype directory at `../menus` containing one file `today.html.hb`.
-  * the text file `today.html.hb` contains placeholders `{{dish}}` and `{{side}}`
-  * you do this: `mojito create custom ../menus TodaysMenu -k dish:tilapia,side:macaroni`
-    * a new directory `TodaysMenu` is created containing the file `today.html` (the ".hb" extension is removed).
-    * in the file `today.html`, all occurrences of the strings `{{dish}}` and `{{side}}` are replaced with `tilapia` and `macaroni`.
+
+You can also specify the option `--keyval` or `-k` to replace  key/value pairs in a string. 
+For example, suppose you have the archetype directory `../menus` that has the one file `today.html.hb`
+containing the Handlebars expressions `{{dish}}` and `{{side}}`. Running the command 
+`mojito create custom ../menus TodaysMenu -k dish:tilapia,side:macaroni` would
+create the new directory `TodaysMenu` containing the file `today.html` (notice that the ".hb" extension is removed).
+In `today.html`, all occurrences of the strings `{{dish}}` and `{{side}}` would be replaced with 
+`tilapia` and `macaroni`.
 
 Discussion/Forums
 -----------------
