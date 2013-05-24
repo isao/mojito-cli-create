@@ -1,7 +1,8 @@
-mojito-create  [![Build Status](https://travis-ci.org/yahoo/mojito-cli-create.png)](https://travis-ci.org/yahoo/mojito-cli-create)
-=============
+mojito-cli-create  [![Build Status](https://travis-ci.org/yahoo/mojito-cli-create.png)](https://travis-ci.org/yahoo/mojito-cli-create)
+=================
 
 This package provides the `create` command for the [`mojito-cli`](https://github.com/yahoo/mojito-cli) tool.
+Install `mojito-cli` and `mojito-cli-create` with the following: `npm install -g mojito-cli`
 
 Creating Code from Archetypes
 -----------------------------
