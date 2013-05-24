@@ -1,7 +1,7 @@
 mojito-cli-create  [![Build Status](https://travis-ci.org/yahoo/mojito-cli-create.png)](https://travis-ci.org/yahoo/mojito-cli-create)
-=============
+=================
 
-This package provides the `create` command for the [`mojito-cli`](https://github.com/yahoo/mojito-cli) tool.
+This package provides the `create` command for the [`mojito-cli`](https://github.com/yahoo/mojito-cli) tool. Install `mojito-cli` and `mojito-cli-create` with the following: `npm install -g mojito-cli`
 
 Creating Code from Archetypes
 -----------------------------
@@ -18,18 +18,18 @@ From the application directory, use the following command to create a skeleton f
 
     mojito create mojit [<archetype-name>] <mojit-name>
 
-This will create an empty mojit with the name provided. The command assumes it is being executed within an application directory. Thus, the mojit is created in a directory named `<mojit-name>` within a mojits subdirectory of the application directory. For example, the mojit MyMojit would be created in mojits/MyMojit.
+This will create an empty mojit with the name provided. The command assumes it is being executed within an application directory. Thus, the mojit is created in a directory named `<mojit-name>` within the `mojits` subdirectory of the application directory. For example, the mojit `MyMojit` would be created in `mojits/MyMojit`.
 
-As with application creation, if no archetype name is provided, the default archetype is used. Depending upon the archetype, the skeleton may include any or all of the controller, model, view, and binder.
+As with application creation, if no archetype name is provided, the default archetype is used. Depending upon the archetype, the skeleton may include any or all of the following: controller, model, view, and binder
 
 Mojito Archetypes
 -----------------
 
 Mojito offers the following three archetypes for applications and mojits.
 
-* simple - The minimal configuration and code needed to run an application.
-* default - This archetype is run if no command-line archetype option is specified. It is a happy medium between simple and full.
-* full - Provides the most comprehensive configuration and code for applications.
+* `simple` - The minimal configuration and code needed to run an application.
+* `default` - This archetype is run if no command-line archetype option is specified. It is a happy medium between simple and full.
+* `full` - Provides the most comprehensive configuration and code for applications.
 
 Custom Archetypes
 -----------------
@@ -38,22 +38,18 @@ You can copy the [built-in](https://github.com/yahoo/mojito-cli-create/tree/mast
 
     mojito create custom <path/to/archtype> <path/to/name>
 
-Or:
+If a file in the archetype source ends with `.hb` then the contents of the file will have key/value replacement done for the following:
 
-    mojito create <path/to/archtype> <path/to/name>
+* `{{port}}` -> default port number 8666 or the value passed by option `--port`
+* `{{name}}` -> the name passed as the last command line argument that is not a flag or option, like `--port`
 
-If a file in the archetype source ends with ".hb" then:
-
-1. the file name created will get the ".hb" removed
-1. the contents of the file will have key/value replacement done for the following:
-  * `{{port}}` -> default port number 8666 or the value passed by option `--port`
-  * `{{name}}` -> the name passed as the last command line argument that is not a flag or option, like `--port`
-  * key/value pairs in a string following the `--keyval`, or `-k` option. For example:
-    * let's say you have an archetype directory at `../menus` containing one file `today.html.hb`.
-    * the text file `today.html.hb` contains placeholders `{{dish}}` and `{{side}}`
-    * you do this: `mojito create custom ../menus TodaysMenu -k dish:tilapia,side:macaroni`
-      * a new directory `TodaysMenu` is created containing the file `today.html` (the ".hb" extension is removed).
-      * in the file `today.html`, all occurrences of the strings `{{dish}}` and `{{side}}` are replaced with `tilapia` and `macaroni`.
+You can also specify the option `--keyval` or `-k` to replace  key/value pairs in a string.
+For example, suppose you have the archetype directory `../menus` that has the one file `today.html.hb`
+containing the Handlebars expressions `{{dish}}` and `{{side}}`. Running the command
+`mojito create custom ../menus TodaysMenu -k dish:tilapia,side:macaroni` would
+create the new directory `TodaysMenu` containing the file `today.html` (notice that the ".hb" extension is removed).
+In `today.html`, all occurrences of the strings `{{dish}}` and `{{side}}` would be replaced with
+`tilapia` and `macaroni`.
 
 Discussion/Forums
 -----------------
@@ -63,7 +59,7 @@ http://developer.yahoo.com/forum/Yahoo-Mojito
 Licensing and Contributions
 ---------------------------
 
-BSD licensed, see LICENSE.txt. To contribute to the Mojito project, please see [Contributing](https://github.com/yahoo/mojito/wiki/Contributing-Code-to-Mojito).
+BSD, see LICENSE.txt. To contribute to the Mojito project, please see [Contributing](https://github.com/yahoo/mojito/wiki/Contributing-Code-to-Mojito).
 
-The Mojito project is a [meritocratic, consensus-based community project](https://github.com/yahoo/mojito/wiki/Governance-Model) which allows anyone to contribute and gain additional responsibilities.
-
+The Mojito project is a [meritocratic, consensus-based community project](https://github.com/yahoo/mojito/wiki/Governance-Model),
+which allows anyone to contribute and gain additional responsibilities.
