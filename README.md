@@ -1,7 +1,7 @@
 mojito-cli-create  [![Build Status](https://travis-ci.org/yahoo/mojito-cli-create.png)](https://travis-ci.org/yahoo/mojito-cli-create)
 =================
 
-This package provides the `create` command for the [`mojito-cli`](https://github.com/yahoo/mojito-cli) tool. Install `mojito-cli` and `mojito-cli-create` with the following: `npm install -g mojito-cli`
+This package provides the `create` command for the [`mojito-cli`](https://github.com/yahoo/mojito-cli) tool, that you can install with: `npm install -g mojito-cli`
 
 Creating Code from Archetypes
 -----------------------------
@@ -44,12 +44,8 @@ If a file in the archetype source ends with `.hb` then the contents of the file 
 * `{{name}}` -> the name passed as the last command line argument that is not a flag or option, like `--port`
 
 You can also specify the option `--keyval` or `-k` to replace  key/value pairs in a string.
-For example, suppose you have the archetype directory `../menus` that has the one file `today.html.hb`
-containing the Handlebars expressions `{{dish}}` and `{{side}}`. Running the command
-`mojito create custom ../menus TodaysMenu -k dish:tilapia,side:macaroni` would
-create the new directory `TodaysMenu` containing the file `today.html` (notice that the ".hb" extension is removed).
-In `today.html`, all occurrences of the strings `{{dish}}` and `{{side}}` would be replaced with
-`tilapia` and `macaroni`.
+
+For example, suppose you have the archetype directory `../menus` that has the one file `today.html.hb` containing the Handlebars expressions `{{dish}}` and `{{side}}`. Running the command `mojito create custom ../menus TodaysMenu -k dish:tilapia,side:macaroni` would create the new directory `TodaysMenu` containing the file `today.html` (notice that the ".hb" extension is removed). In `today.html`, all occurrences of the strings `{{dish}}` and `{{side}}` would be replaced with `tilapia` and `macaroni`.
 
 Discussion/Forums
 -----------------
