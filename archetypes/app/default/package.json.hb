@@ -2,14 +2,12 @@
     "name": "{{name}}",
     "description": "My Mojito application",
     "version": "0.0.1",
-    "author": "Your Name <nobody@yahoo-inc.com>",
-    "contributors": [
-        "Some Name <somebody@yahoo-inc.com>"
-    ],
+    "author": "",
+    "contributors": [],
     "dependencies": {
-        "mojito": "0.5.x"
+        "mojito": ">0.6"
     },
     "engines": {
-        "node": ">0.6"
+        "node": ">0.8"
     }
 }
