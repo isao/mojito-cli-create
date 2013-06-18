@@ -13,9 +13,9 @@
           }
     ],
     "dependencies": {
-        "mojito": "0.5.x"
+        "mojito": ">0.6"
     },
     "engines": {
-        "node": ">0.6"
+        "node": ">0.8"
     }
 }
