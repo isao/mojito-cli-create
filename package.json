@@ -14,7 +14,7 @@
   },
   "scripts": {
     "lint": "jshint {.,lib}/*.js",
-    "test": "node tests",
+    "test": "tap tests/index.js",
     "cover": "istanbul cover --dir artifacts/coverage tests",
     "clean": "git clean -dfx {.,tests}/artifacts"
   },
