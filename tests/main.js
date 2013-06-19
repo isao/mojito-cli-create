@@ -83,7 +83,7 @@ test('create custom nonesuch/path', function(t) {
 
     function cb(err) {
         t.true(err instanceof Error, 'instance of Error');
-        t.equal(err.toString(), 'Error: Custom archtype path is invalid.');
+        t.equal(err.toString(), 'Error: Custom archetype path is invalid.');
         t.equal(err.usage.substring(0, 6), 'Usage:');
         t.equal(err.errno, 5);
     }
@@ -225,7 +225,7 @@ test('getSourceDir custom nonesuch foo', function(t) {
     var actual = fn.getSourceDir('custom', ['nonesuch', 'foo']);
 
     t.ok(actual instanceof Error);
-    t.equal(actual.toString(), 'Error: Custom archtype path is invalid.');
+    t.equal(actual.toString(), 'Error: Custom archetype path is invalid.');
     t.equal(actual.errno, 5);
     t.equal(actual.usage.slice(0, 6), 'Usage:');
     t.end();

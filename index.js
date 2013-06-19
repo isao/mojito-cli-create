@@ -76,7 +76,7 @@ function getSourceDir(type, args) {
     case 'custom':
         // 2. mojito create [options] custom <path/to/archetype> <name>
         source = pathify(args.shift());
-        err = 'Custom archtype path is invalid.';
+        err = 'Custom archetype path is invalid.';
         break;
 
     default:
