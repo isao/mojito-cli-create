@@ -82,7 +82,7 @@ function getSourceDir(type, args) {
     default:
         // 3. mojito create [options] <path/to/archetype> <name>
         //    (this *should* be the only supported syntax)
-        source = util.exists(type) && path.resolve(type);
+        source = pathify(type);
         err = type + ' is not a valid archetype or path.';
     }
 
