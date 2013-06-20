@@ -13,15 +13,13 @@
     "tap": "~0.4.1"
   },
   "scripts": {
-    "lint": "jshint {.,lib}/*.js",
+    "prepublish": "npm test",
+    "pretest": "jshint {.,lib}/*.js*",
     "test": "tap tests/index.js",
     "cover": "istanbul cover --dir artifacts/coverage tests",
-    "clean": "git clean -dfx {.,tests}/artifacts"
+    "clean": "git clean -dfX **/artifacts"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/yahoo/mojito-cli-create.git"
-  },
+  "repository": "git://github.com/yahoo/mojito-cli-create.git",
   "bugs": "https://github.com/yahoo/mojito-cli-create/issues",
   "contributors": [
     "Chris Klaiber",
