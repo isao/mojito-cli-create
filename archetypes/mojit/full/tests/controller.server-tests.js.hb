@@ -24,7 +24,7 @@ YUI.add('{{name}}-tests', function(Y) {
             ac = {
                 models: {
                     get: function(modelName) {
-                        A.areEqual('{{name}}Model', modelName, 'wrong model name');
+                        A.areEqual('model', modelName, 'wrong model name');
                         return {
                             getData: function(cb) {
                                 cb(null, 'Congrats!');
