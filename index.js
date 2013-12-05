@@ -12,18 +12,17 @@ var path = require('path'),
     util = require('./lib/utils'),
     create = require('./lib/create'),
 
+    // default name of archetype directories
+    ARCHETYPES = 'archetypes',
+
     // todo: make user configurable
-    SRCPATHS = [path.resolve(__dirname, 'archetypes'), '../archetypes'];
+    SRCPATHS = [path.resolve(__dirname, ARCHETYPES), path.join('../', ARCHETYPES)];
 
 
 function errorWithUsage(code, msg) {
     var err = util.error(code, msg);
     err.usage = module.exports.usage;
     return err;
-}
-
-function pathify(subpath) {
-    return util.findInPaths(SRCPATHS, subpath); // full path if exists, or false
 }
 
 function makeDestinationDir(from, to) {
@@ -61,8 +60,13 @@ function subtypePath(type, args) {
     return path.join(type, subtype).toLowerCase(); // i.e. 'app/full'
 }
 
-function getSourceDir(type, args) {
+function getSourceDir(type, args, paths) {
     var source, err;
+
+    // get the first full path/subpath that exists in `paths`, or return false
+    function pathify(subpath) {
+        return util.findInPaths(paths, subpath);
+    }
 
     // get archetype source directory based on first one OR two arguments
     switch (type.toLowerCase()) {
@@ -102,6 +106,25 @@ function amMissingArgs(type, args) {
     return err && errorWithUsage(3, err);
 }
 
+// prepend optional pathnames to the array of directories in which to find
+// archetype templates
+function getSourcePaths(env) {
+    var paths = [];
+
+    // env.mojito is the full path to <cwd>/node_modules/mojito
+    // OR the resolved full path of the --libmojito command line option
+    if (env.mojito && env.mojito.path) {
+        paths.push(path.join(env.mojito.path, ARCHETYPES));
+    }
+
+    // array of cli options -a or --archetype
+    if (env.opts.archetype) {
+        paths = env.opts.archetype.concat(paths);
+    }
+
+    return paths.concat(SRCPATHS);
+}
+
 function exec(source, dest, keyval, cb) {
     var dircheck = makeDestinationDir(source, dest);
 
@@ -119,7 +142,8 @@ function exec(source, dest, keyval, cb) {
 
 function main(env, cb) {
     var type = env.args.shift() || '',
-        source = amMissingArgs(type, env.args) || getSourceDir(type, env.args),
+        paths = getSourcePaths(env),
+        source = amMissingArgs(type, env.args) || getSourceDir(type, env.args, paths),
         name = env.args.shift(),
         keyval = util.parseCsvObj(env.opts.keyval),
         dest = env.opts.directory || '.';
@@ -177,6 +201,7 @@ module.exports.usage = [
     '  (creates directory "Bar" containing new Mojit named "Bar")',
     '',
     'Options: ',
+    '  --archetype <path> Optional source path(s) to archetype templates',
     '  --directory <path> Optional destination directory',
     '  -d <path>          Short for --directory',
     '  --port <number>    Specifies default port for your Mojito app to run on.',
@@ -187,10 +212,12 @@ module.exports.usage = [
     '  -k <string>        Short for --keyval'].join('\n');
 
 module.exports.options = [
+    {shortName: 'a', hasValue: Array, longName: 'archetype'},
     {shortName: 'd', hasValue: true, longName: 'directory'},
     {shortName: 'k', hasValue: true, longName: 'keyval'},
     {shortName: 'p', hasValue: true, longName: 'port'}
 ];
 
 module.exports.getSourceDir = getSourceDir;
+module.exports.getSourcePaths = getSourcePaths;
 module.exports.npmi = require('./lib/npmi');
