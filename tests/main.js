@@ -1,7 +1,9 @@
 var path = require('path'),
     test = require('tap').test,
     log = require('../lib/log'),
-    fn = require('../');
+    fn = require('../'),
+
+    SRCPATHS = [path.resolve(__dirname, '../archetypes')];
 
 log.pause();
 
@@ -127,7 +129,7 @@ test('create path/to/fixtures (missing name)', function(t) {
 // fn.getSourceDir tests
 
 test('getSourceDir app foo', function(t) {
-    var actual = fn.getSourceDir('app', ['foo']),
+    var actual = fn.getSourceDir('app', ['foo'], SRCPATHS),
         expected = 'archetypes/app/default';
 
     t.equal(actual.slice(-expected.length), expected);
@@ -135,7 +137,7 @@ test('getSourceDir app foo', function(t) {
 });
 
 test('getSourceDir app nonesuch foo', function(t) {
-    var actual = fn.getSourceDir('app', ['nonesuch', 'foo']);
+    var actual = fn.getSourceDir('app', ['nonesuch', 'foo'], SRCPATHS);
 
     t.ok(actual instanceof Error);
     t.equal(actual.toString(), 'Error: Invalid subtype.');
@@ -145,7 +147,7 @@ test('getSourceDir app nonesuch foo', function(t) {
 });
 
 test('getSourceDir app default foo', function(t) {
-    var actual = fn.getSourceDir('app', ['default', 'foo']),
+    var actual = fn.getSourceDir('app', ['default', 'foo'], SRCPATHS),
         expected = 'archetypes/app/default';
 
     t.equal(actual.slice(-expected.length), expected);
@@ -153,7 +155,7 @@ test('getSourceDir app default foo', function(t) {
 });
 
 test('getSourceDir app simple foo', function(t) {
-    var actual = fn.getSourceDir('app', ['simple', 'foo']),
+    var actual = fn.getSourceDir('app', ['simple', 'foo'], SRCPATHS),
         expected = 'archetypes/app/simple';
 
     t.equal(actual.slice(-expected.length), expected);
@@ -161,7 +163,7 @@ test('getSourceDir app simple foo', function(t) {
 });
 
 test('getSourceDir app full foo', function(t) {
-    var actual = fn.getSourceDir('app', ['full', 'foo']),
+    var actual = fn.getSourceDir('app', ['full', 'foo'], SRCPATHS),
         expected = 'archetypes/app/full';
 
     t.equal(actual.slice(-expected.length), expected);
@@ -169,7 +171,7 @@ test('getSourceDir app full foo', function(t) {
 });
 
 test('getSourceDir app yahoo foo', function(t) {
-    var actual = fn.getSourceDir('app', ['yahoo', 'foo']),
+    var actual = fn.getSourceDir('app', ['yahoo', 'foo'], SRCPATHS),
         expected = 'archetypes/app/yahoo';
 
     t.equal(actual.slice(-expected.length), expected);
@@ -177,7 +179,7 @@ test('getSourceDir app yahoo foo', function(t) {
 });
 
 test('getSourceDir mojit default foo', function(t) {
-    var actual = fn.getSourceDir('mojit', ['default', 'foo']),
+    var actual = fn.getSourceDir('mojit', ['default', 'foo'], SRCPATHS),
         expected = 'archetypes/mojit/default';
 
     t.equal(actual.slice(-expected.length), expected);
@@ -185,7 +187,7 @@ test('getSourceDir mojit default foo', function(t) {
 });
 
 test('getSourceDir mojit simple foo', function(t) {
-    var actual = fn.getSourceDir('mojit', ['simple', 'foo']),
+    var actual = fn.getSourceDir('mojit', ['simple', 'foo'], SRCPATHS),
         expected = 'archetypes/mojit/simple';
 
     t.equal(actual.slice(-expected.length), expected);
@@ -193,7 +195,7 @@ test('getSourceDir mojit simple foo', function(t) {
 });
 
 test('getSourceDir mojit full foo', function(t) {
-    var actual = fn.getSourceDir('mojit', ['full', 'foo']),
+    var actual = fn.getSourceDir('mojit', ['full', 'foo'], SRCPATHS),
         expected = 'archetypes/mojit/full';
 
     t.equal(actual.slice(-expected.length), expected);
@@ -203,18 +205,18 @@ test('getSourceDir mojit full foo', function(t) {
 test('type and subtype case-insensitive', function(t) {
     var actual, expected;
 
-    actual = fn.getSourceDir('APP', ['FULL', 'foo']);
+    actual = fn.getSourceDir('APP', ['FULL', 'foo'], SRCPATHS);
     expected = 'archetypes/app/full';
     t.equal(actual.slice(-expected.length), expected);
 
-    actual = fn.getSourceDir('aPP', ['Full', 'foo']),
+    actual = fn.getSourceDir('aPP', ['Full', 'foo'], SRCPATHS),
     t.equal(actual.slice(-expected.length), expected);
 
-    actual = fn.getSourceDir('mOJit', ['sIMPle', 'foo']);
+    actual = fn.getSourceDir('mOJit', ['sIMPle', 'foo'], SRCPATHS);
     expected = 'archetypes/mojit/simple';
     t.equal(actual.slice(-expected.length), expected);
 
-    actual = fn.getSourceDir('mOJit', ['DEFAULT', 'foo']);
+    actual = fn.getSourceDir('mOJit', ['DEFAULT', 'foo'], SRCPATHS);
     expected = 'archetypes/mojit/default';
     t.equal(actual.slice(-expected.length), expected);
 
@@ -222,7 +224,7 @@ test('type and subtype case-insensitive', function(t) {
 });
 
 test('getSourceDir custom nonesuch foo', function(t) {
-    var actual = fn.getSourceDir('custom', ['nonesuch', 'foo']);
+    var actual = fn.getSourceDir('custom', ['nonesuch', 'foo'], SRCPATHS);
 
     t.ok(actual instanceof Error);
     t.equal(actual.toString(), 'Error: Custom archetype path is invalid.');
@@ -232,7 +234,7 @@ test('getSourceDir custom nonesuch foo', function(t) {
 });
 
 test('getSourceDir nonesuch foo', function(t) {
-    var actual = fn.getSourceDir('nonesuch', ['foo']);
+    var actual = fn.getSourceDir('nonesuch', ['foo'], SRCPATHS);
 
     t.ok(actual instanceof Error);
     t.equal(actual.toString(), 'Error: nonesuch is not a valid archetype or path.');
@@ -242,7 +244,7 @@ test('getSourceDir nonesuch foo', function(t) {
 });
 
 test('getSourceDir nonesuch nonesuch foo', function(t) {
-    var actual = fn.getSourceDir('nonesuch', ['nonesuch', 'foo']);
+    var actual = fn.getSourceDir('nonesuch', ['nonesuch', 'foo'], SRCPATHS);
 
     t.ok(actual instanceof Error);
     t.equal(actual.toString(), 'Error: nonesuch is not a valid archetype or path.');
@@ -253,9 +255,24 @@ test('getSourceDir nonesuch nonesuch foo', function(t) {
 
 test('getSourceDir fixtures/barefile.txt.hb foo', function(t) {
     var archetype = 'fixtures/barefile.txt.hb',
-        actual = fn.getSourceDir(path.resolve(__dirname, archetype), ['foo']);
+        actual = fn.getSourceDir(path.resolve(__dirname, archetype), ['foo'], SRCPATHS);
 
     t.equal(typeof actual, 'string');
     t.equal(actual.slice(-archetype.length), archetype);
+    t.end();
+});
+
+test('getSourceDir --libmojito', function(t) {
+    var env = {opts: {}, mojito: null},
+        expected = 'path/to/mojito',
+        actual;
+
+    actual = fn.getSourcePaths(env);
+    t.equal(actual.length, 2);
+
+    env.mojito = {path:expected};
+    actual = fn.getSourcePaths(env); console.log(actual);
+    t.equal(actual.length, 3);
+    t.equal(actual[0].substring(0, expected.length), expected);
     t.end();
 });
