@@ -68,7 +68,7 @@ function getSourceDir(type, args) {
     switch (type.toLowerCase()) {
     case 'app':
     case 'mojit':
-        // 1. mojito create [options] mojit [full|simple|default] <name>
+        // 1. mojito create [options] <app|mojit> [full|simple|default] <name>
         source = pathify(subtypePath(type, args));
         err = 'Invalid subtype.';
         break;
@@ -119,14 +119,11 @@ function exec(source, dest, keyval, cb) {
 
 function main(env, cb) {
     var type = env.args.shift() || '',
-        // If user runs `mojito create app`, install the quickstart guide as an example app 
-        // and so the user can view the documentation. App name and archetype are the same.
-        args = (env.args == 0 && type == "app") ? ["quickstartguide", "quickstartguide"] : env.args,
-        source = amMissingArgs(type, args) || getSourceDir(type, args),
-        name = args.shift(),
+        source = amMissingArgs(type, env.args) || getSourceDir(type, env.args),
+        name = env.args.shift(),
         keyval = util.parseCsvObj(env.opts.keyval),
         dest = env.opts.directory || '.';
-        console.log(args);
+
     if (env.opts.loglevel) {
         log.level = env.opts.loglevel;
         log.silly('logging level set to', env.opts.loglevel);
@@ -169,7 +166,7 @@ function main(env, cb) {
 module.exports = main;
 
 module.exports.usage = [
-    'Usage: mojito create [options] <app|mojit> [full|simple|default] <name>',
+    'Usage: mojito create [options] <app|mojit> [full|simple|default|quickstartguide] <name>',
     'Usage: mojito create [options] custom <path/to/archetype> <name>',
     'Usage: mojito create [options] <path/to/archetype> <name>',
     '',
