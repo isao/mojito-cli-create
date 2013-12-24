@@ -17,7 +17,7 @@
     "pretest": "npm run clean",
     "test": "tap tests/index.js",
     "cover": "istanbul cover --dir artifacts/coverage tests",
-    "clean": "git clean -dfX **/artifacts"
+    "clean": "git clean -dfX {.,tests}/artifacts"
   },
   "repository": "git://github.com/yahoo/mojito-cli-create.git",
   "bugs": "https://github.com/yahoo/mojito-cli-create/issues",
