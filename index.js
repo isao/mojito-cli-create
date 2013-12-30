@@ -72,15 +72,20 @@ function getSourceDir(type, args) {
         source = pathify(subtypePath(type, args));
         err = 'Invalid subtype.';
         break;
-
+    case 'demo':
+        // Allows you to create demo apps that come with the `mojito-cli-create` package
+        // or any demo app that you place under `archetypes/demo/`.
+        // 2. mojito create [options] demo [quickstartguide|<your_demo_app>] <name>
+        source = pathify(subtypePath(type, args));
+        err = 'The demo app you specified does not exist.';
+        break;
     case 'custom':
-        // 2. mojito create [options] custom <path/to/archetype> <name>
+        // 3. mojito create [options] custom <path/to/archetype> <name>
         source = pathify(args.shift());
         err = 'Custom archetype path is invalid.';
         break;
-
     default:
-        // 3. mojito create [options] <path/to/archetype> <name>
+        // 4. mojito create [options] <path/to/archetype> <name>
         //    (this *should* be the only supported syntax)
         source = pathify(type);
         err = type + ' is not a valid archetype or path.';
