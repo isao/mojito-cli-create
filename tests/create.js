@@ -38,7 +38,7 @@ test('create nonesuch', function(t) {
         to = resolve(__dirname, 'artifacts'),
         scan;
 
-    t.plan(8);
+    t.plan(7);
 
     function cb(err, msg) {
         t.equal(err.toString(), 'Error: 1 error');
@@ -49,7 +49,6 @@ test('create nonesuch', function(t) {
     scan.on('error', function(err, pathname, stat) {
         t.equal(pathname, from);
         t.equal(err.code, 'ENOENT');
-        t.equal(err.errno, 34);
         t.same(err.message, "ENOENT, stat 'oh hey, no. sorry.'");
         t.equal(pathname, err.path);
         t.false(stat);
@@ -61,13 +60,12 @@ test('create nonesuch no cb', function(t) {
         to = resolve(__dirname, 'artifacts'),
         scan;
 
-    t.plan(6);
+    t.plan(5);
 
     scan = fn(from, to, {}, null);
     scan.on('error', function(err, pathname, stat) {
         t.equal(pathname, from);
         t.equal(err.code, 'ENOENT');
-        t.equal(err.errno, 34);
         t.same(err.message, "ENOENT, stat 'oh hey, no. sorry.'");
         t.equal(pathname, err.path);
         t.false(stat);
