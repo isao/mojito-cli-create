@@ -31,6 +31,19 @@ Mojito offers the following three archetypes for applications and mojits.
 * `default` - This archetype is run if no command-line archetype option is specified. It is a happy medium between simple and full.
 * `full` - Provides the most comprehensive configuration and code for applications.
 
+Mojito Demo Apps
+----------------
+
+Mojito also offers the demo app `quickstartguide` that is an example app displaying documentation.
+To `quickstartguide` app, run the following:
+
+    mojito create demo quickstartguide <name>
+
+You can also create your own demo apps by placing them under the `archetypes/demo` directory and
+then running the following command:
+
+    mojito create demo <your_demo_app> <name>
+
 Custom Archetypes
 -----------------
 
