@@ -1,5 +1,5 @@
 /*jslint anon:true, sloppy:true, nomen:true*/
-YUI.add('{{name}}Model', function(Y, NAME) {
+YUI.add('{{name}}-model', function(Y, NAME) {
 
 /**
  * The {{name}}Model module.

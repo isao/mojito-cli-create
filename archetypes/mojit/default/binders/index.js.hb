@@ -1,5 +1,5 @@
 /*jslint anon:true, sloppy:true, nomen:true*/
-YUI.add('{{name}}BinderIndex', function(Y, NAME) {
+YUI.add('{{name}}-binder-index', function(Y, NAME) {
 
 /**
  * The {{name}}BinderIndex module.
