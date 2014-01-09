@@ -10,7 +10,7 @@ YUI.add('{{name}}-model-tests', function(Y, NAME) {
         name: '{{name}}-model user tests',
         
         setUp: function() {
-            model = Y.mojito.models.{{name}}-model;
+            model = Y.mojito.models["{{name}}-model"];
         },
         tearDown: function() {
             model = null;

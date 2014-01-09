@@ -1,16 +1,16 @@
 /*jslint anon:true, sloppy:true, nomen:true*/
-YUI.add('{{name}}BinderIndex', function(Y, NAME) {
+YUI.add('{{name}}-binder-index', function(Y, NAME) {
 
 /**
- * The {{name}}BinderIndex module.
+ * The {{name}}-binder-index module.
  *
- * @module {{name}}BinderIndex
+ * @module {{name}}-binder-index
  */
 
     /**
-     * Constructor for the {{name}}BinderIndex class.
+     * Constructor for the {{name}}-binder-index class.
      *
-     * @class {{name}}BinderIndex
+     * @class {{name}}-binder-index
      * @constructor
      */
     Y.namespace('mojito.binders')[NAME] = {
