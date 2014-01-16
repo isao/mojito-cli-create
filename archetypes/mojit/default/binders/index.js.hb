@@ -8,9 +8,9 @@ YUI.add('{{name}}-binder-index', function(Y, NAME) {
  */
 
     /**
-     * Constructor for the {{name}}-binder-index class.
+     * Constructor for the {{class}}BinderIndex class.
      *
-     * @class {{name}}-binder-index
+     * @class {{class}}BinderIndex
      * @constructor
      */
     Y.namespace('mojito.binders')[NAME] = {

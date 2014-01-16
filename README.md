@@ -54,7 +54,10 @@ You can copy the [built-in](https://github.com/yahoo/mojito-cli-create/tree/mast
 If a file in the archetype source ends with `.hb` then the contents of the file will have key/value replacement done for the following:
 
 * `{{port}}` -> default port number 8666 or the value passed by option `--port`
-* `{{name}}` -> the name passed as the last command line argument that is not a flag or option, like `--port`
+* `{{name}}` -> the name passed as the last command line argument that is not a flag or option, like `--port`. The
+  name is lowercased and used for the module name of mojit code.
+* `{{class}}` -> is the sname as `{{name}}` except the value is not lowercased. The value is used for the class name
+  of mojit code.
 
 You can also specify the option `--keyval` or `-k` to replace  key/value pairs in a string.
 

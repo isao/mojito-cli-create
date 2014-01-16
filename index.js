@@ -157,7 +157,8 @@ function main(env, cb) {
     }
 
     dest = getDestinationDir(type, dest, name);
-    keyval.name = keyval.name || name;
+    keyval.class = keyval.name || name; 
+    keyval.name = keyval.class.toLowerCase();
     keyval.port = env.opts.port || 8666;
 
     function npmCb(err) {

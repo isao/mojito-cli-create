@@ -8,9 +8,9 @@ YUI.add('{{name}}-model', function(Y, NAME) {
  */
 
     /**
-     * Constructor for the {{name}}-model class.
+     * Constructor for the {{class}}Model class.
      *
-     * @class {{name}}-model
+     * @class {{class}}Model
      * @constructor
      */
     Y.namespace('mojito.models')[NAME] = {
