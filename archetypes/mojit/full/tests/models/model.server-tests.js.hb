@@ -1,5 +1,5 @@
 
-YUI.add('{{name}}Model-tests', function(Y, NAME) {
+YUI.add('{{name}}-model-tests', function(Y, NAME) {
     
     var suite = new YUITest.TestSuite(NAME),
         model = null,
@@ -7,10 +7,10 @@ YUI.add('{{name}}Model-tests', function(Y, NAME) {
     
     suite.add(new YUITest.TestCase({
         
-        name: '{{name}}Model user tests',
+        name: '{{name}}-model user tests',
         
         setUp: function() {
-            model = Y.mojito.models.{{name}}Model;
+            model = Y.mojito.models["{{name}}-model"];
         },
         tearDown: function() {
             model = null;
@@ -40,4 +40,4 @@ YUI.add('{{name}}Model-tests', function(Y, NAME) {
     
     YUITest.TestRunner.add(suite);
     
-}, '0.0.1', {requires: ['mojito-test', '{{name}}Model']});
+}, '0.0.1', {requires: ['mojito-test', '{{name}}-model']});

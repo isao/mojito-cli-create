@@ -11,7 +11,7 @@ YUI.add('{{name}}-tests', function(Y) {
         name: '{{name}} user tests',
         
         setUp: function() {
-            controller = Y.mojito.controllers.{{name}};
+            controller = Y.mojito.controllers["{{name}}"];
         },
         tearDown: function() {
             controller = null;
