@@ -14,13 +14,9 @@ http://devel.corp.yahoo.com/cocktails/mojito/manhattan_reqs_mojito_startup.html#
 
 process.chdir(__dirname);
 
-/*
-* Create the MojitoServer instance we'll interact with. Options can be passed
-* using an object with the desired key/value pairs.
-*/
-var Mojito = require('mojito');
-var app = Mojito.createServer();
+var http = require('http'),
+    app = require('./app');
 
 module.exports = function(config, token) {
-    process.emit('application-ready', token, app.getHttpServer());
+    process.emit('application-ready', token, http.createServer(app));
 };

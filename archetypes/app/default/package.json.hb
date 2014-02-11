@@ -5,9 +5,11 @@
     "author": "",
     "contributors": [],
     "dependencies": {
-        "mojito": ">0.6"
+        "express": "3.x",
+        "mojito": ">=1.0.0"
     },
     "engines": {
-        "node": ">0.8"
-    }
+        "node": ">=0.8"
+    },
+    "main": "./app.js"
 }
