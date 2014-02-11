@@ -6,7 +6,7 @@
     "contributors": [],
     "dependencies": {
         "express": "3.x",
-        "mojito": ">=1.0.0"
+        "mojito": ">=0.8.0"
     },
     "engines": {
         "node": ">=0.8"
