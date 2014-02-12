@@ -33,6 +33,6 @@
     },
     "dependencies": {
         "node-markdown": "*",
-        "mojito": "*"
+        "mojito": "~0.9"
     }
 }
