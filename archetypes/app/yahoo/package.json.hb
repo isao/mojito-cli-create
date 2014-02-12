@@ -13,9 +13,11 @@
           }
     ],
     "dependencies": {
-        "mojito": ">0.6"
+        "express": "3.x",
+        "mojito": "~0.9"
     },
     "engines": {
-        "node": ">0.8"
-    }
+        "node": ">=0.8"
+    },
+    "main": "./app.js"
 }
