@@ -7,7 +7,7 @@ var express = require('express'),
 app = express();
 
 // Set the port to listen on.
-app.set('port', process.env.PORT || 8666);
+app.set('port', process.env.PORT || {{port}});
 
 // Create a new Mojito instance and attach it to `app`.
 // Options can be passed to `extend`.
