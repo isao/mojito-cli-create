@@ -24,9 +24,6 @@ app.use(libmojito.middleware());
 // Load routes configuration from routes.json
 app.mojito.attachRoutes();
 
-// Setup the Tunnel middleware to support RPC
-app.post('/tunnel', libmojito.tunnelMiddleware());
-
 app.listen(app.get('port'), function () {
     console.log('Server listening on port ' + app.get('port') + ' ' +
                    'in ' + app.get('env') + ' mode');
