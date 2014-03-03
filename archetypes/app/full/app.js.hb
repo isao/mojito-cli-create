@@ -24,6 +24,9 @@ app.use(libmojito.middleware());
 // Load routes configuration from routes.json
 app.mojito.attachRoutes();
 
+// Allow anonymyous mojit instances w/ actions to be dispatched
+app.get('/:mojit/:action', libmojito.dispatch("{mojit}.{action}"));
+
 app.listen(app.get('port'), function () {
     console.log('Server listening on port ' + app.get('port') + ' ' +
                    'in ' + app.get('env') + ' mode');
