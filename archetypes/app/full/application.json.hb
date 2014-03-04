@@ -2,7 +2,6 @@
     {
         "settings": [ "master" ],
 
-        "appPort": "{{port}}",
         "cacheViewTemplates": true,
         "staticHandling": {
             "appName": "app",

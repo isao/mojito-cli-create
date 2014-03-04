@@ -172,7 +172,8 @@ function main(env, cb) {
 module.exports = main;
 
 module.exports.usage = [
-    'Usage: mojito create [options] <app|mojit> [full|simple|default|quickstartguide] <name>',
+    'Usage: mojito create [options] <app|mojit> [full|simple|default] <name>',
+    'Usage: mojito create [options] <demo> [quickstartguide] <name>',
     'Usage: mojito create [options] custom <path/to/archetype> <name>',
     'Usage: mojito create [options] <path/to/archetype> <name>',
     '',

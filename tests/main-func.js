@@ -65,7 +65,7 @@ test('[func] create app simple simpleapp', function(t) {
         var dest = path.join(artifacts, name);
         t.false(err instanceof Error, 'no error');
         t.ok(fs.existsSync(dest));
-        t.ok(fs.existsSync(path.join(dest, 'server.js')));
+        t.ok(fs.existsSync(path.join(dest, 'app.js')));
     }
 
     t.plan(4);
